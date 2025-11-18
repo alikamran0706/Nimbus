@@ -1,8 +1,9 @@
-import { Router } from "express"
-import { auth } from "../middleware/auth.js"
-import { ResumeController } from "../controllers/resume.controller.js"
+import express from "express";
+import {parseResumeText} from "../controllers/resume.controller.js";
+import { verifyAuth } from "../middleware/auth.js";
 
-export const resumeRoutes = Router()
-resumeRoutes.use(auth)
-resumeRoutes.get("/", ResumeController.get)
-resumeRoutes.put("/", ResumeController.upsert)
+const router = express.Router();
+
+router.post("/parse", verifyAuth, parseResumeText);
+
+export default router;

@@ -15,11 +15,18 @@ export const AuthController = {
     res.json(out)
   },
   me: async (req, res, userId) => {
-    const user = await AuthAppService.me(userId)
-    res.json(user)
+    try {
+      const authUserId = req.user._id || req.user;
+      const user = await AuthAppService.me(authUserId);
+
+      res.json(user);
+    } catch (error) {
+      console.error('Error in AuthController.me:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
   },
   resend: async (req, res) => {
-     const { email } = req.body;
+    const { email } = req.body;
     const user = await AuthAppService.resendVerificationCode(email)
     res.json({ success: true, message: "Verification code sent successfully" })
   },

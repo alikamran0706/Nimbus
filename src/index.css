@@ -4,7 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
   --background: 0 0% 100%;
   --foreground: 222.2 84% 4.9%;
@@ -37,6 +36,42 @@
   font-weight: 600;
 }
 
+input::placeholder {
+  @apply text-gray-500;
+}
+
+/* For modern browsers */
+.scrollbar-thin-gray::-webkit-scrollbar {
+  width: 2px;  /* Thin scrollbar */
+  background: transparent; /* Hide the whole scrollbar background */
+}
+
+.scrollbar-thin-gray::-webkit-scrollbar-track {
+  background: transparent; /* Fully transparent track */
+}
+
+.scrollbar-thin-gray::-webkit-scrollbar-thumb {
+  background-color: #b7bac0; /* Tailwind gray-400 for thumb */
+  border-radius: 10px;
+  border: 2px solid transparent; /* Transparent border for some padding */
+}
+
+/* Firefox */
+.scrollbar-thin-gray {
+  scrollbar-width: thin;
+  scrollbar-color: #b7bac0 transparent; /* Thumb visible, track transparent */
+}
+
+/* Hide scrollbar on all browsers */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE/Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari, Opera */
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -58,13 +93,13 @@
     @apply bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-6 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2;
   }
 
-.input-field {
-  @apply w-full px-4 py-[9px] border border-gray-300 rounded-[6px]
+  .input-field {
+    @apply w-full px-4 py-[9px] border border-gray-300 rounded-[6px]
     focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-transparent
     transition-all duration-200 placeholder:text-gray-400;
-    
-  @apply disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-500;
-}
+
+    @apply disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-500;
+  }
 
   .auth-card {
     @apply bg-white rounded-2xl shadow-auth-card p-6 w-full max-w-md;

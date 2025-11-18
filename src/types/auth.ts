@@ -7,6 +7,7 @@ export interface User {
   country?: string
   dateOfBirth?: string
   isVerified: boolean
+  role: string
 }
 
 export interface AuthState {
@@ -30,7 +31,7 @@ export interface RegisterCredentials {
   country: string
   nationality: string
   dateOfBirth: string
-  accountType: 'candidate' | 'recruiter'
+  role: 'candidate' | 'recruiter'
 }
 
 export interface VerificationData {

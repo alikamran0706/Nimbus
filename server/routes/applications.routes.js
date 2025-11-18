@@ -1,8 +1,19 @@
-import { Router } from "express"
-import { auth } from "../middleware/auth.js"
-import { ApplicationsController } from "../controllers/applications.controller.js"
+import express from "express";
+import { getApplications, createApplication, getApplication, updateApplication, deleteApplication, }
+  from "../controllers/applications.controller.js";
+import { verifyAuth } from "../middleware/auth.js";
 
-export const applicationsRoutes = Router()
-applicationsRoutes.use(auth)
-applicationsRoutes.get("/", ApplicationsController.list)
-applicationsRoutes.get("/:id", ApplicationsController.get)
+const router = express.Router();
+
+router
+  .route("/")
+  .get(verifyAuth, getApplications)
+  .post(verifyAuth, createApplication);
+
+router
+  .route("/:id")
+  .get(verifyAuth, getApplication)
+  .put(verifyAuth, updateApplication)
+  .delete(verifyAuth, deleteApplication);
+
+export default router;

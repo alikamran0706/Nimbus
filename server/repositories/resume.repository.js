@@ -1,10 +1,11 @@
-import { ResumeModel } from "../models/Resume.js"
+// resume.repository.js
+import BaseRepository from "./base.repository.js";
+import Resume from "../models/resume.model.js";
 
-export const ResumeRepository = {
-  getByUser(userId) {
-    return ResumeModel.findOne({ userId })
-  },
-  upsert(userId, data) {
-    return ResumeModel.findOneAndUpdate({ userId }, { ...data, userId }, { upsert: true, new: true })
-  },
+class ResumeRepository extends BaseRepository {
+  constructor() {
+    super(Resume);
+  }
 }
+
+export default new ResumeRepository();

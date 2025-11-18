@@ -6,6 +6,9 @@ import path from "path"
 export default defineConfig({
    server: {
     port: process.env.PORT as unknown as number,
+    proxy: {
+      '/api': 'http://localhost:3000',
+    },
   },
   plugins: [react()],
   resolve: {

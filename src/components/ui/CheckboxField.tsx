@@ -9,7 +9,7 @@ type CheckboxFieldProps = {
 export const CheckboxField = ({ name, label, extraLink }: CheckboxFieldProps & {extraLink?: React.ReactNode}) => (
   <>
     <div className="flex justify-between items-center w-full">
-      <div className="flex items-center">
+      <div className="flex">
         <Field
           type="checkbox"
           name={name}

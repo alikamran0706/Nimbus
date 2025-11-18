@@ -52,7 +52,7 @@ export const SignIn = () => {
   const location = useLocation()
 
   const { isLoading, error, isAuthenticated } = useAppSelector(state => state.auth)
-  const from = location.state?.from?.pathname || '/dashboard'
+  const from = location.state?.from?.pathname || '/applicants'
 
   useEffect(() => {
     if (isAuthenticated) {

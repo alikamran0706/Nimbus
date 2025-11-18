@@ -19,7 +19,7 @@ export const InputField = ({
   disabled,
   readOnly,
 }: InputFieldProps) => {
-const [field, meta] = useField(name)
+  const [field, meta] = useField(name)
   const { submitCount } = useFormikContext()
 
   const showError = !!meta.error && (meta.touched || submitCount > 0)
@@ -30,6 +30,7 @@ const [field, meta] = useField(name)
         {label}
       </label>
       <Field
+        {...field}
         id={name}
         name={name}
         type={type}
@@ -38,7 +39,9 @@ const [field, meta] = useField(name)
         required={required}
         placeholder={placeholder}
         className={`input-field ${
-          showError  ? 'border-1 border-primary-600 ring-[0.2px] ring-primary-600 focus:ring-primary-600' : ''
+          showError
+            ? 'border-1 border-primary-600 ring-[0.2px] ring-primary-600 focus:ring-primary-600'
+            : ''
         }`}
       />
       <ErrorMessage

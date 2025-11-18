@@ -1,13 +1,11 @@
-import { ApplicationModel } from "../models/Application.js"
+// application.repository.js
+import BaseRepository from "./base.repository.js";
+import Application from "../models/application.model.js";
 
-export const ApplicationRepository = {
-  listByUser(userId) {
-    return ApplicationModel.find({ userId }).sort({ createdAt: -1 })
-  },
-  getById(id) {
-    return ApplicationModel.findById(id)
-  },
-  create(data) {
-    return ApplicationModel.create(data)
-  },
+class ApplicationRepository extends BaseRepository {
+  constructor() {
+    super(Application);
+  }
 }
+
+export default new ApplicationRepository();

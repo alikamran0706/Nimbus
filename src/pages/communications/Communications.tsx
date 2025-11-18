@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
 interface Message {
   id: string
@@ -11,6 +10,13 @@ interface Message {
   isRead: boolean
   isStarred: boolean
   icon: 'message' | 'email'
+}
+
+interface ChatMessage {
+  id: string
+  sender: 'user' | 'company'
+  text: string
+  timestamp: string
 }
 
 const mockMessages: Message[] = [
@@ -31,7 +37,7 @@ const mockMessages: Message[] = [
     company: 'WebSolutions',
     type: 'Message',
     position: 'Offshore Construction',
-    preview: "Thanks for your application. We'll be in touch soon.",
+    preview: "Thanks for your application. We'll be in touch soon. ✓",
     date: '2025-07-31',
     isRead: true,
     isStarred: false,
@@ -50,223 +56,303 @@ const mockMessages: Message[] = [
   },
   {
     id: '4',
-    company: 'WebSolutions Recruiter',
-    type: 'WhatsApp',
-    position: 'Quick Question',
-    preview: 'Hi John, I had a quick question about your availability...',
-    date: '2023-07-14',
+    company: 'hrgltechcorp.com',
+    type: 'Email',
+    position: 'Interview Confirmation',
+    preview: "We're looking forward to meeting you on July 20th...",
+    date: '2023-07-15',
     isRead: false,
     isStarred: false,
-    icon: 'message',
+    icon: 'email',
   },
   {
     id: '5',
-    company: 'notifications@deeper.com',
+    company: 'hrgltechcorp.com',
     type: 'Email',
-    position: 'Application Received',
-    preview: 'Thank you for applying to the Offshore Construction position...',
-    date: '2023-07-11',
+    position: 'Interview Confirmation',
+    preview: "We're looking forward to meeting you on July 20th...",
+    date: '2023-07-15',
     isRead: false,
     isStarred: false,
     icon: 'email',
   },
   {
     id: '6',
-    company: 'CTRO',
-    type: 'Message',
-    position: 'Renewable energy',
-    preview: "Congratulations! We'd like to offer you the Renewable energy position.",
-    date: 'Jul 18',
+    company: 'hrgltechcorp.com',
+    type: 'Email',
+    position: 'Interview Confirmation',
+    preview: "We're looking forward to meeting you on July 20th...",
+    date: '2023-07-15',
     isRead: false,
     isStarred: false,
-    icon: 'message',
+    icon: 'email',
   },
   {
     id: '7',
-    company: 'InnovateTech',
-    type: 'Message',
-    position: 'Renewable energy',
-    preview: "We regret to inform you that we've decided to move forward with other candidates.",
-    date: 'Jul 05',
-    isRead: true,
+    company: 'xyz.com',
+    type: 'Email',
+    position: 'Interview Confirmation',
+    preview: "We're looking forward to meeting you on July 20th...",
+    date: '2023-07-15',
+    isRead: false,
     isStarred: false,
-    icon: 'message',
+    icon: 'email',
+  },
+  {
+    id: '8',
+    company: 'abc.com',
+    type: 'Email',
+    position: 'Interview Confirmation',
+    preview: "We're looking forward to meeting you on July 20th...",
+    date: '2023-07-15',
+    isRead: false,
+    isStarred: false,
+    icon: 'email',
+  },
+]
+
+const mockChatMessages: ChatMessage[] = [
+  {
+    id: '1',
+    sender: 'company',
+    text: 'Hi John, thank you for your application to the Front Desk Manager position at TechCorp Inc.',
+    timestamp: '9:30 am',
+  },
+  {
+    id: '2',
+    sender: 'company',
+    text: "We've reviewed your resume and would like to schedule an interview with you.",
+    timestamp: '9:32 am',
+  },
+  {
+    id: '3',
+    sender: 'user',
+    text: "Great! I'm very interested in the position. ✓",
+    timestamp: '10:15 am',
+  },
+  {
+    id: '4',
+    sender: 'company',
+    text: 'Are you available Thursday at 2 PM for a video interview?',
+    timestamp: '10:20 am',
+  },
+  {
+    id: '5',
+    sender: 'company',
+    text: 'Are you available Thursday at 2 PM for a video interview?',
+    timestamp: '10:20 am',
+  },
+  {
+    id: '6',
+    sender: 'company',
+    text: 'Are you available Thursday at 2 PM for a video interview?',
+    timestamp: '10:20 am',
   },
 ]
 
 export function Communications() {
   const [messages, setMessages] = useState<Message[]>(mockMessages)
+  const [selectedConversation, setSelectedConversation] = useState<string>('1')
   const [searchQuery, setSearchQuery] = useState('')
+  const [newMessage, setNewMessage] = useState('')
+  const [isChatOpenMobile, setIsChatOpenMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 930)
+
+  const selectedMsg = messages.find(m => m.id === selectedConversation)
+
+  // Track screen resize for mobile toggle
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 930)
+      if (window.innerWidth >= 930) setIsChatOpenMobile(false)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const markAsRead = (id: string) => {
-    setMessages(messages.map(msg => (msg.id === id ? { ...msg, isRead: true } : msg)))
-  }
-
-  const markAllAsRead = () => {
-    setMessages(messages.map(msg => ({ ...msg, isRead: true })))
+    setMessages(msgs => msgs.map(msg => (msg.id === id ? { ...msg, isRead: true } : msg)))
   }
 
   const toggleStar = (id: string) => {
-    setMessages(messages.map(msg => (msg.id === id ? { ...msg, isStarred: !msg.isStarred } : msg)))
+    setMessages(msgs =>
+      msgs.map(msg => (msg.id === id ? { ...msg, isStarred: !msg.isStarred } : msg))
+    )
+  }
+
+  const handleSelectConversation = (id: string) => {
+    setSelectedConversation(id)
+    markAsRead(id)
+    if (isMobile) setIsChatOpenMobile(true)
+  }
+
+  const handleSendMessage = () => {
+    if (newMessage.trim()) {
+      // For demo, just clear input (add message sending logic if needed)
+      setNewMessage('')
+    }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Main Content */}
-      <div className="p-4 max-w-7xl mx-auto">
-        {/* Header Navigation */}
-        <div className="bg-white border-b border-gray-100 p-4 rounded-tr-lg rounded-tl-lg">
-          <Link
-            to="/dashboard"
-            className="inline-flex items-center gap-2 text-red-600 hover:text-red-700 text-sm sm:text-base"
-          >
-            <img src={'/images/back.png'} alt="Back" className="h-5 w-5" />
-            Back to Dashboard
-          </Link>
-        </div>
-
-        {/* Main Panel */}
-        <div className="bg-white shadow-sm p-4 sm:p-6 rounded-b-lg">
-          {/* Page Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
-            <div>
-              <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">Communications</h1>
-              <p className="text-gray-500 text-sm sm:text-base">
-                All your messages, emails, and notifications in one place
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-              <button
-                onClick={markAllAsRead}
-                className="px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg border border-gray-300 w-full sm:w-auto"
-              >
-                Mark All Read
-              </button>
-              <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 w-full sm:w-auto">
-                Compose
-              </button>
-            </div>
-          </div>
-
-          {/* Search & Filters */}
-          <div className="flex flex-col md:flex-row md:items-center gap-3 mb-6">
-            <div className="relative w-full md:flex-1">
-              <span className="absolute left-3 top-2.5 text-gray-400 text-sm">🔍</span>
+    <div className="flex mx-auto bg-white">
+      {/* Conversations Panel */}
+      {!isChatOpenMobile && (
+        <div className={`w-full ${!isMobile ? 'md:w-80' : 'w-full'} border-r border-gray-150`}>
+          {/* Search */}
+          <div className="p-4 border-b border-gray-150">
+            <div className="relative">
+              <span className="absolute left-3 top-2.5 text-gray-400">
+                 <img src={'/svg/search.svg'} alt="icon" />
+              </span>
               <input
                 type="text"
-                placeholder="Search communications"
+                placeholder="Search conversations"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm"
               />
             </div>
-            <div className="flex flex-wrap gap-2">
-              <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                Type: All
-              </button>
-              <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                Filter All
-              </button>
-            </div>
           </div>
 
-          {/* Messages */}
-          <div className="space-y-4">
-            {messages.map(message => (
-              <div
-                key={message.id}
-                className={`flex flex-col sm:flex-row sm:items-start gap-4 p-4 rounded-lg border ${message.isRead ? 'bg-white border-gray-200' : 'bg-red-50 border-red-100'
-                  }`}
-              >
-                {/* Icon */}
-                <div
-                  className={`w-10 h-10 rounded flex items-center justify-center flex-shrink-0 ${message.icon === 'email' ? 'bg-blue-100' : 'bg-green-100'
+          {/* Message List */}
+          <div className="h-[calc(88vh-4rem)] flex flex-col">
+            <div></div>
+            <div className="flex-1 overflow-y-auto scrollbar-thin-gray">
+              {messages
+                .filter(
+                  msg =>
+                    msg.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    msg.preview.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map(message => (
+                  <button
+                    key={message.id}
+                    onClick={() => handleSelectConversation(message.id)}
+                    className={`w-full text-left p-4 border-b border-gray-100 hover:bg-gray-50 transition ${
+                      selectedConversation === message.id ? 'bg-red-50' : ''
                     }`}
-                >
-                  {message.icon === 'email' ? (
-                    <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                      />
-                    </svg>
-                  ) : (
-                    <svg className="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                      />
-                    </svg>
-                  )}
-                </div>
-
-                {/* Message Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-col sm:flex-row sm:justify-between gap-2 mb-1">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-semibold text-gray-900">{message.company}</h3>
-                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                        {message.type}
-                      </span>
+                  >
+                    <div className="flex items-start justify-between gap-2 items-center">
+                      <div className='bg-gray-150 rounded-lg p-2 text-xsplus'>Co</div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 justify-between gap-x-2">
+                          <h3
+                            className={`text-gray-900 truncate ${
+                              !message.isRead ? 'font-bold' : 'font-semibold'
+                            }`}
+                          >
+                            {message.company}
+                          </h3>
+                          <div className="text-xs text-gray-500 flex-shrink-0">{message.date}</div>
+                        </div>
+                        <div className="flex justify-between w-full gap-x-2">
+                          <p className="text-sm text-gray-600 truncate">{message.preview}</p>
+                          {!message.isRead && (
+                            <div className="flex items-center justify-center w-[20px] h-[20px] px-1.5 bg-red-600 text-white text-xs font-semibold rounded-full">
+                              2
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-sm text-gray-500">{message.date}</span>
-                  </div>
-                  <p className="font-medium text-gray-900 mb-1">{message.position}</p>
-                  <p className="text-gray-600 text-sm">{message.preview}</p>
-                </div>
-
-                {/* Actions */}
-                <div className="flex items-center gap-2 mt-2 sm:mt-0">
-                  <button
-                    onClick={() => toggleStar(message.id)}
-                    className="p-1 hover:bg-gray-100 rounded text-sm"
-                  >
-                    ⭐
                   </button>
-                  <button className="p-1 hover:bg-gray-100 rounded text-sm">🗑️</button>
-                </div>
-
-                {!message.isRead && (
-                  <button
-                    onClick={() => markAsRead(message.id)}
-                    className="text-sm text-red-600 hover:text-red-700 whitespace-nowrap"
-                  >
-                    ✓ Mark as read
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Pagination */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-6 pt-6 border-t border-gray-200 gap-2">
-            <p className="text-sm text-gray-600 text-center sm:text-left">
-              Showing 1 to {messages.length} of {messages.length} results
-            </p>
-            <div className="flex items-center justify-center gap-2">
-              <button className="p-2 border border-gray-300 rounded hover:bg-gray-50">⬅️</button>
-              <button className="px-3 py-1 bg-red-600 text-white rounded">1</button>
-              <button className="p-2 border border-gray-300 rounded hover:bg-gray-50">➡️</button>
+                ))}
             </div>
           </div>
         </div>
-      </div>
+      )}
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-12 py-6 px-4">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-600">
-          <p className="text-center sm:text-left">© 2025 Nimbus. All rights reserved. Version 1.0.0</p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link to="/help" className="hover:text-gray-900">Help Center</Link>
-            <Link to="/contact" className="hover:text-gray-900">Contact Us</Link>
-            <Link to="/terms" className="hover:text-gray-900">Terms & Conditions</Link>
-          </div>
+      {/* Chat Panel */}
+      {(isChatOpenMobile || !isMobile) && (
+        <div className={`w-full flex-1 flex flex-col ${isMobile ? 'h-[calc(84vh-4rem)]' : 'h-[calc(100vh-4rem)]'} max-w-7xl`}>
+          {selectedMsg ? (
+            <>
+              {/* Chat Header */}
+              {isMobile && (
+              <div className="px-4 py-[13px] border-b border-gray-150 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  
+                    <button
+                      onClick={() => setIsChatOpenMobile(false)}
+                      className="text-gray-500 hover:text-gray-700 p-2"
+                    >
+                      <img src={'/svg/back-arrow.svg'} alt="icon" />
+                    </button>
+                  <div>
+                    <h2 className="font-semibold text-gray-900">{selectedMsg.company}</h2>
+                    <p className="text-sm text-gray-600">{selectedMsg.position}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => toggleStar(selectedMsg.id)}
+                  className="p-2 hover:bg-gray-100 rounded-lg"
+                >
+                  {selectedMsg.isStarred ? '⭐' : '☆'}
+                </button>
+              </div>
+              )}
+
+              {/* Messages + Input + Footer Wrapper */}
+              <div className="flex flex-col flex-1 h-full">
+                {/* Chat Messages */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin-gray">
+                  {mockChatMessages.map(msg => (
+                    <div
+                      key={msg.id}
+                      className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                    >
+                      <div
+                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                          msg.sender === 'user'
+                            ? 'bg-red-600 text-white rounded-br-none'
+                            : 'bg-gray-100 text-gray-900 rounded-bl-none'
+                        }`}
+                      >
+                        <p className="text-sm">{msg.text}</p>
+                        <p
+                          className={`text-xs mt-1 ${
+                            msg.sender === 'user' ? 'text-red-100' : 'text-gray-500'
+                          }`}
+                        >
+                          {msg.timestamp}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Message Input */}
+                <div className="p-4 border-t border-gray-200 flex-shrink-0">
+                  <div className="flex items-center gap-2">
+                    <button className="p-2 hover:bg-gray-100 rounded-lg text-gray-600">
+                      <img src={'/svg/file.svg'} alt="icon" />
+                    </button>
+                    <input
+                      type="text"
+                      placeholder="Type a message..."
+                      value={newMessage}
+                      onChange={e => setNewMessage(e.target.value)}
+                      onKeyPress={e => e.key === 'Enter' && handleSendMessage()}
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                     <img src={'/svg/emoji.svg'} alt="icon" />
+                    <button
+                      onClick={handleSendMessage}
+                      className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                    >
+                      <img src={'/svg/send.svg'} alt="icon" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 flex items-center justify-center text-gray-500">
+              <p>Select a conversation to start messaging</p>
+            </div>
+          )}
         </div>
-      </footer>
+      )}
     </div>
   )
 }

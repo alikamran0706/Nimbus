@@ -31,13 +31,14 @@ const initialValues = {
   nationality: '',
   dateOfBirth: '',
   agreeToTerms: false,
+  role: 'recruiter'
 }
 
 export const SignUp = () => {
   const [accountType, setAccountType] = useState<'candidate' | 'recruiter'>('candidate')
 
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { isLoading, error, user } = useAppSelector(state => state.auth)
 
   const fields = [
@@ -96,17 +97,18 @@ export const SignUp = () => {
     {
       name: 'agreeToTerms',
       label: (
-        <div className="flex flex-wrap gap-2 items-center justify-between">
-          <div className="flex items-center text-xsplus w-100">
-            I agree to the&nbsp;
+        <div className="flex flex-wrap gap-2 justify-between">
+          <div className="text-xsplus text-gray-700">
+            I agree to the{' '}
             <Link to="/terms" className="text-primary-600">
               Terms of Service
-            </Link>
-            &nbsp; and&nbsp;
+            </Link>{' '}
+            and{' '}
             <Link to="/privacy" className="text-primary-600">
               Privacy Policy
             </Link>
           </div>
+
           <div>
             <Button label="Sign up" variant="gradient" type="submit" loading={isLoading} />
           </div>
@@ -128,7 +130,7 @@ export const SignUp = () => {
   }, [dispatch])
 
   const handleSubmit = (values: typeof initialValues) => {
-    dispatch(registerUser({ ...values, accountType }))
+    dispatch(registerUser({ ...values, role: accountType }))
   }
 
   return (

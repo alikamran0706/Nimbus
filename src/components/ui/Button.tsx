@@ -1,19 +1,23 @@
-import clsx from 'clsx'
+import clsx from "clsx";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  loading?: boolean
-  label: string
-  variant?: 'primary' | 'secondary' | 'gradient'
-  fullWidth?: boolean
-}
+  loading?: boolean;
+  label?: string;
+  variant?: "primary" | "secondary" | "gradient" | "white" | "green" | 'gray';
+  fullWidth?: boolean;
+  startIcon?: React.ReactNode; // 👈 New prop
+  endIcon?: React.ReactNode;   // 👈 Optional (for arrows, etc.)
+};
 
 export const Button = ({
   loading,
   label,
   disabled,
-  variant = 'primary',
+  variant = "primary",
   fullWidth = false,
-  className,
+  startIcon,
+  endIcon,
+  className='rounded-lg',
   ...props
 }: ButtonProps) => {
   return (
@@ -21,20 +25,23 @@ export const Button = ({
       {...props}
       disabled={loading || disabled}
       className={clsx(
-        'font-medium py-2 px-4 rounded-lg transition-colors text-sm',
+        "font-medium py-2 px-4 transition-colors text-sm flex items-center justify-center gap-2",
         {
-          'bg-primary-600 hover:bg-primary-700 text-white': variant === 'primary',
-          'bg-gray-200 hover:bg-gray-300 text-black': variant === 'secondary',
-          'bg-red-gradient text-white': variant === 'gradient',
-          'w-full': fullWidth,
-          'opacity-70 cursor-not-allowed': loading || disabled,
+          "bg-primary-600 hover:bg-primary-700 text-white": variant === "primary",
+          "bg-gray-200 hover:bg-gray-300 text-black": variant === "secondary",
+          "bg-white hover:bg-gray-40 border border-gray-300 text-gray-800": variant === "white",
+          "bg-gray-100 hover:bg-gray-150 text-gray-800": variant === "gray",
+          "bg-[#22C55E] text-white": variant === "green",
+          "bg-red-gradient text-white": variant === "gradient",
+          "w-full": fullWidth,
+          "opacity-70 cursor-not-allowed": loading || disabled,
         },
-        'disabled:bg-primary-100 disabled:text-gray-700',
+        "disabled:bg-primary-100 disabled:text-gray-700",
         className
       )}
     >
       {loading ? (
-        <div role="status" className='px-4'>
+        <div role="status" className="px-4">
           <svg
             aria-hidden="true"
             className="inline w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-white"
@@ -54,8 +61,12 @@ export const Button = ({
           <span className="sr-only">Loading...</span>
         </div>
       ) : (
-        label
+        <>
+          {startIcon && <span className="flex items-center">{startIcon}</span>}
+          {label && <span>{label}</span>}
+          {endIcon && <span className="flex items-center">{endIcon}</span>}
+        </>
       )}
     </button>
-  )
-}
+  );
+};

@@ -1,14 +1,15 @@
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import { z } from "zod"
-import { UserRepository } from "../repositories/user.repository.js"
+import { AuthRepository } from "../repositories/auth.repository.js"
+import { signRefreshToken, signToken } from "../utils/jwt.js"
 
 const RegisterSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   email: z.string().email(),
   password: z.string().min(6),
-  role: z.enum(["candidate", "recruiter"]).default("candidate"),
+  role: z.enum(["candidate", "recruiter", "admin"]).default("candidate"),
   country: z.string().optional(),
   nationality: z.string().optional(),
   dateOfBirth: z.string().optional(),
@@ -27,11 +28,11 @@ export const AuthAppService = {
   async register(payload) {
     const data = RegisterSchema.parse(payload)
 
-    const exists = await UserRepository.findByEmail(data.email)
+    const exists = await AuthRepository.findByEmail(data.email)
     if (exists) throw new Error("Email already exists")
 
     const passwordHash = await bcrypt.hash(data.password, 10)
-    const user = await UserRepository.create({ ...data, passwordHash, isVerified: false })
+    const user = await AuthRepository.create({ ...data, passwordHash, isVerified: false })
     console.log(user, 'sdsd', 'ddddddddd')
 
     return { user: toClient(user) }
@@ -39,28 +40,32 @@ export const AuthAppService = {
 
   async login(payload) {
     const { email, password } = LoginSchema.parse(payload)
-    const user = await UserRepository.findByEmail(email)
+    const user = await AuthRepository.findByEmail(email)
     if (!user) throw new Error("Invalid credentials")
     const ok = await bcrypt.compare(password, user.passwordHash)
     if (!ok) throw new Error("Invalid credentials")
-    const token = sign(user._id)
-    return { user: toClient(user), token }
+    // const token = sign(user._id)
+    const token = signToken({ ...user, sub: user._id });
+    const refreshToken = signRefreshToken(user);
+    return { user: toClient(user), token, refreshToken }
   },
 
   async verify(email, code) {
-    const user = await UserRepository.verifyByEmail(email, code);
+    const user = await AuthRepository.verifyByEmail(email, code);
 
-    const token = sign(user._id);
+    // const token = sign(user._id);
+     const token = signToken({ ...user, sub: user._id });
+    const refreshToken = signRefreshToken(user);
 
-    return { user: toClient(user), token };
+    return { user: toClient(user), token, refreshToken };
   },
 
   async resendVerificationCode(email) {
-    return await UserRepository.resend(email);
+    return await AuthRepository.resend(email);
   },
 
   async me(userId) {
-    const user = await UserRepository.findById(userId)
+    const user = await AuthRepository.findById(userId)
     if (!user) throw new Error("User not found")
     return toClient(user)
   },
