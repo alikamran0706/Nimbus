@@ -1,11 +1,12 @@
 import type React from 'react'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 export default function RecruiterCandidates() {
-
-  const [selectedCandidates, setSelectedCandidates] = useState<number[]>([]);
+  const [selectedCandidates, setSelectedCandidates] = useState<number[]>([])
+  const [candidates, setCandidates] = useState<any>([])
+  const [loading, setLoading] = useState(true)
   const [filters, setFilters] = useState({
     firstName: '',
     lastName: '',
@@ -14,63 +15,21 @@ export default function RecruiterCandidates() {
     phone: '',
   })
 
-  const candidates = [
-    {
-      id: 1,
-      name: 'Alex Johnson',
-      email: 'alex.johnson@example.com',
-      role: 'Master DPO',
-      roleDescription: "Master's in Marine Engineering",
-      skills: ['Teamwork', 'Onboarding', 'UX operations'],
-      aiMatch: 85,
-      source: 'LinkedIn',
-      status: 'Saved',
-    },
-    {
-      id: 2,
-      name: 'Sarah Williams',
-      email: 'sarah.w@example.com',
-      role: 'Hotel General Manager',
-      roleDescription: 'MBA',
-      skills: ['User management', 'Talent Plus', 'Candidate Sourcing'],
-      aiMatch: 72,
-      source: 'Email',
-      status: 'Shortlisted',
-    },
-    {
-      id: 3,
-      name: 'Michael Brown',
-      email: 'm.brown@example.com',
-      role: 'Marine Crew',
-      roleDescription: "Bachelor's in Maritime Studies",
-      skills: ['Anger', 'Scripting', 'Client Sourcing'],
-      aiMatch: 65,
-      source: 'Website',
-      status: 'Saved',
-    },
-    {
-      id: 4,
-      name: 'Emily Davis',
-      email: 'emily.d@example.com',
-      role: 'Chief Officer',
-      roleDescription: "Bachelor's in Maritime Operations",
-      skills: ['Digital Integration', 'DAM', 'UX Sourcing'],
-      aiMatch: 58,
-      source: 'LinkedIn',
-      status: 'Rejected',
-    },
-    {
-      id: 5,
-      name: 'Daniel Wilson',
-      email: 'daniel.w@example.com',
-      role: 'Marine Shore Jobs',
-      roleDescription: "Bachelor's in Marine Engineering",
-      skills: ['User Support', 'Mobile Analyst', 'Button Sourcing'],
-      aiMatch: 78,
-      source: 'Email',
-      status: 'Shortlisted',
-    },
-  ]
+  const fetchCandidates = async () => {
+    try {
+      const res = await fetch(`${process.env.BACKEND_BASE_API}/api/candidates`)
+      const json = await res.json()
+      setCandidates(json.data)
+    } catch (error) {
+      console.error('Error fetching candidates:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchCandidates()
+  }, [])
 
   const getAIMatchColor = (score: number) => {
     if (score >= 75) return 'bg-green-100 text-green-700'
@@ -303,7 +262,6 @@ export default function RecruiterCandidates() {
             </button>
           </div>
         </div>
-
         <div className="bg-[#EFF6FF] p-2 m-4 flex items-center gap-2 border border-[#BFDBFE] rounded-lg">
           <span
             className={`inline-flex items-center justify-center w-5 h-5 ms-2 text-xs 
@@ -316,127 +274,143 @@ export default function RecruiterCandidates() {
             for shortlisting.
           </p>
         </div>
-
         {/* Candidates Table */}
-        <div className="overflow-x-auto px-4">
-          <table className="w-full min-w-[800px]">
-            <thead className=" border-b border-gray-150">
-              <tr>
-                <th className="px-6 py-3 text-left">
-                  <input type="checkbox" className="rounded" />
-                </th>
-                {['Name', 'Role', 'Skills', 'AI Match', 'Source', 'Status', 'Actions'].map(
-                  header => (
-                    <th
-                      key={header}
-                      className={`px-6 py-3 text-left text-sm font-semibold text-gray-900 ${
-                        header === 'AI Match' ? 'w-[170px]' : header === 'Skills' ? 'w-[220px]' : ''
-                      }`}
-                    >
-                      {header}
-                    </th>
-                  )
-                )}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-150">
-              {candidates.map((candidate, index) => (
-                <tr key={candidate.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedCandidates.includes(candidate.id)}
-                      onChange={() => toggleCandidate(candidate.id)}
-                      className="rounded"
-                    />
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm font-medium text-gray-900 truncate">
-                      {candidate.name}
-                    </div>
-                    <div className="text-xs text-gray-600 truncate">{candidate.email}</div>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    <div className="text-sm font-medium text-gray-900 truncate">
-                      {candidate.role}
-                    </div>
-                    <div className="text-xs text-gray-600">{index + 1} years</div>
-                    <div className="text-xs text-gray-600 truncate">
-                      {candidate.roleDescription}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex flex-wrap gap-1">
-                      {candidate.skills.map((skill, idx) => (
-                        <span
-                          key={idx}
-                          className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xsmall"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    {/* Percentage Text */}
-                    <div className="flex items-center space-x-1">
-                      <button
-                        type="button"
-                        className="inline-flex items-center rounded-lg cursor-pointer-none"
+        {loading ? (
+          <div className="p-6 text-center">Loading candidates...</div>
+        ) : (
+          <div className="overflow-x-auto px-4">
+            <table className="w-full min-w-[800px]">
+              <thead className=" border-b border-gray-150">
+                <tr>
+                  <th className="px-6 py-3 text-left">
+                    <input type="checkbox" className="rounded" />
+                  </th>
+                  {['Name', 'Role', 'Skills', 'AI Match', 'Source', 'Status', 'Actions'].map(
+                    header => (
+                      <th
+                        key={header}
+                        className={`px-6 py-3 text-left text-sm font-semibold text-gray-900 ${
+                          header === 'AI Match'
+                            ? 'w-[170px]'
+                            : header === 'Skills'
+                            ? 'w-[220px]'
+                            : ''
+                        }`}
                       >
-                        <span
-                          className={`inline-flex items-center justify-center w-7 h-7 ms-2 text-xs 
+                        {header}
+                      </th>
+                    )
+                  )}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-150">
+                {candidates.map((candidate: any, index: number) => (
+                  <tr key={candidate.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4">
+                      <input
+                        type="checkbox"
+                        checked={selectedCandidates.includes(candidate.id)}
+                        onChange={() => toggleCandidate(candidate.id)}
+                        className="rounded"
+                      />
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm font-medium text-gray-900 truncate">
+                        {candidate.name}
+                      </div>
+                      <div className="text-xs text-gray-600 truncate">{candidate.email}</div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">
+                      <div className="text-sm font-medium text-gray-900 truncate">
+                        {candidate.role}
+                      </div>
+                      <div className="text-xs text-gray-600">{index + 1} years</div>
+                      <div className="text-xs text-gray-600 truncate">
+                        {candidate.roleDescription}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex flex-wrap gap-1">
+                        {candidate.skills.map((skill: any, idx: number) => (
+                          <span
+                            key={idx}
+                            className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xsmall"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      {/* Percentage Text */}
+                      <div className="flex items-center space-x-1">
+                        <button
+                          type="button"
+                          className="inline-flex items-center rounded-lg cursor-pointer-none"
+                        >
+                          <span
+                            className={`inline-flex items-center justify-center w-7 h-7 ms-2 text-xs 
                             font-semibold text-blue-800 ${getAIMatchColor(
                               candidate.aiMatch
                             )} rounded-full`}
-                        >
-                          {candidate.aiMatch}
-                        </span>
-                      </button>
-                      <div className="w-full">
-                        {/* Progress Bar Container */}
-                        <div className="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
-                          {/* Progress Bar (Filled part with AI match color) */}
-                          <div
-                            className={`${getAIMatchBgColor(candidate.aiMatch)} h-1.5 rounded-full`}
-                            style={{ width: `${candidate.aiMatch}%` }}
-                          ></div>
+                          >
+                            {candidate.aiMatch}
+                          </span>
+                        </button>
+                        <div className="w-full">
+                          {/* Progress Bar Container */}
+                          <div className="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
+                            {/* Progress Bar (Filled part with AI match color) */}
+                            <div
+                              className={`${getAIMatchBgColor(
+                                candidate.aiMatch
+                              )} h-1.5 rounded-full`}
+                              style={{ width: `${candidate.aiMatch}%` }}
+                            ></div>
+                          </div>
+                          <p className="text-[7px] text-gray-600">AI Match Score</p>
                         </div>
-                        <p className="text-[7px] text-gray-600">AI Match Score</p>
                       </div>
-                    </div>
-                  </td>
+                    </td>
 
-                  <td className="px-6 py-4 text-sm text-gray-900">
-                    <div className="flex w-[60px] gap-x-2">
-                      <img src={getSourceIcon(candidate.source)} height={15} width={15} alt="icon" />
-                      <p className='text-xs'>{candidate.source}</p>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`px-1 py-1 rounded-md text-xsmall font-semibold ${getStatusColor(
-                        candidate.status
-                      )}`}
-                    >
-                      {candidate.status}
-                    </span>
-                  </td>
-                  <td className="px-2 py-4">
-                    <div className="flex items-center gap-1">
-                      <img src={'/svg/green-tick.svg'} alt="icon" />
-                      <img src={'/svg/red-cross.svg'} alt="icon" />
-                      <Link to={'/recruiter/candidate'} className="text-blue-600 hover:text-blue-700 text-sm font-medium">
-                        View
-                      </Link>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      <div className="flex w-[60px] gap-x-2">
+                        <img
+                          src={getSourceIcon(candidate.source)}
+                          height={15}
+                          width={15}
+                          alt="icon"
+                        />
+                        <p className="text-xs">{candidate.source}</p>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`px-1 py-1 rounded-md text-xsmall font-semibold ${getStatusColor(
+                          candidate.status
+                        )}`}
+                      >
+                        {candidate.status}
+                      </span>
+                    </td>
+                    <td className="px-2 py-4">
+                      <div className="flex items-center gap-1">
+                        <img src={'/svg/green-tick.svg'} alt="icon" />
+                        <img src={'/svg/red-cross.svg'} alt="icon" />
+                        <Link
+                          to={'/recruiter/candidate'}
+                          className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                        >
+                          View
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
         {/* Bulk Actions */}
         <div className="px-4 sm:px-6 py-4 m-4 rounded-lg bg-gray-50 border border-gray-150 flex flex-col sm:flex-row sm:justify-between gap-4 sm:items-center">
           <span className="text-sm text-gray-600">

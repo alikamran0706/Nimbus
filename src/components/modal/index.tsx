@@ -7,9 +7,17 @@ interface ModalProps {
   title: string
   children: ReactNode
   size?: 'sm' | 'md' | 'lg' | 'xl'
+  customFooter?: any
 }
 
-export default function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalProps) {
+export default function Modal({
+  isOpen,
+  onClose,
+  title,
+  children,
+  size = 'md',
+  customFooter = null,
+}: ModalProps) {
   if (!isOpen) return null
 
   const sizeClasses = {
@@ -42,11 +50,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
 
         {/* Footer */}
         <div className="flex justify-end border-t border-gray-150 p-4">
-          <Button
-            label="Close"
-            onClick={onClose}
-            variant='white'
-          />
+          {customFooter ? customFooter() : <Button label="Close" onClick={onClose} variant="white" />}
         </div>
       </div>
     </div>

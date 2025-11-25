@@ -11,12 +11,11 @@ const ResumeSchema = new Schema(
     nationality: String,
     industry: String,
     dateOfBirth: String,
-    fileUrl: String,
     textExtracted: String,
     parsedSkills: [String],
     achievements: [String],
-    education: [{ institution: String, degree: String, year: String }],
-    experience: [{ company: String, role: String, years: Number }],
+    education: [{ institution: String, degree: String, startDate: String, endDate: String }],
+    experience: [{ company: String, role: String, startDate: String, endDate: String, isCurrent: { type: Boolean, default: false },  }],
     summary: String,
     media: {
       versions: [
@@ -25,6 +24,12 @@ const ResumeSchema = new Schema(
           path: { type: String },
         },
       ],
+      url: String,
+      caption: String,
+      isPrimary: { type: Boolean, default: false },
+      uploadedAt: { type: Date, default: Date.now },
+    },
+    document: {
       url: String,
       caption: String,
       isPrimary: { type: Boolean, default: false },

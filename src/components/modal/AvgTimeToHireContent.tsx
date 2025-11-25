@@ -1,5 +1,3 @@
-
-import type { ApexOptions } from 'apexcharts'
 import Modal from '.'
 
  const departments = [

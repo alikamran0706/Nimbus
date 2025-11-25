@@ -10,7 +10,11 @@ const candidateSchema = new Schema(
     location: String,
     skills: [String],
     resume: { type: mongoose.Schema.Types.ObjectId, ref: "Resume" },
+    roleDescription: String,
+    role: String,
     source: String,
+    aiMatch: Number,
+    status: String,
   },
   { timestamps: true }
 );

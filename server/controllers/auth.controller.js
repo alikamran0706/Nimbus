@@ -15,6 +15,7 @@ export const AuthController = {
     res.json(out)
   },
   me: async (req, res, userId) => {
+    console.log('kkkkkkkkkkkkkkkkk', req.user, 'jjjjjjj')
     try {
       const authUserId = req.user._id || req.user;
       const user = await AuthAppService.me(authUserId);

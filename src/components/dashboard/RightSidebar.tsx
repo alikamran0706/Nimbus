@@ -1,4 +1,8 @@
+import { useState } from 'react'
+import UploadResumeModal from '../modal/UploadResumeModal'
+
 export const RightSidebar = () => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <aside className="w-full lg:w-80 space-y-6 flex-shrink-0">
       {/* Resume Section */}
@@ -17,6 +21,7 @@ export const RightSidebar = () => {
             <button
               className="text-xsplus w-full bg-primary-600 hover:bg-red-700 text-white font-medium py-2 px-4 
                 rounded-lg transition-colors"
+              onClick={() => setIsOpen(true)}
             >
               Update Resume
             </button>
@@ -121,6 +126,8 @@ export const RightSidebar = () => {
           </button>
         </div>
       </div>
+
+      <UploadResumeModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </aside>
   )
 }

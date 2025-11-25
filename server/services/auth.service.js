@@ -45,7 +45,8 @@ export const AuthAppService = {
     const ok = await bcrypt.compare(password, user.passwordHash)
     if (!ok) throw new Error("Invalid credentials")
     // const token = sign(user._id)
-    const token = signToken({ ...user, sub: user._id });
+    const crrentUser = user?._doc
+    const token = signToken({ ...crrentUser, sub: user._id });
     const refreshToken = signRefreshToken(user);
     return { user: toClient(user), token, refreshToken }
   },
@@ -54,7 +55,7 @@ export const AuthAppService = {
     const user = await AuthRepository.verifyByEmail(email, code);
 
     // const token = sign(user._id);
-     const token = signToken({ ...user, sub: user._id });
+    const token = signToken({ ...user, sub: user._id });
     const refreshToken = signRefreshToken(user);
 
     return { user: toClient(user), token, refreshToken };

@@ -11,10 +11,21 @@ You are an AI resume parser. Extract structured information from the following r
 
 Return JSON with this shape:
 {
+  "firstName": "",
+ "lastName": "",
+ "email": "",
+ "contactNo": "",
+ "nationality": "",
+ "industry": "",
+ "dateOfBirth": "",
   "summary": string,
   "skills": string[],
-  "experience": [{ "company": string, "role": string, "years": number }],
-  "education": [{ "institution": string, "degree": string, "year": string }]
+  "education": [
+  { "institution": "", "degree": "", "startDate": "", "endDate": "" }
+  ],
+  "experience": [
+      { "company": "", "role": "", "startDate": "", "endDate": "", "isCurrent": false }
+  ],
 }
 
 Resume:

@@ -10,17 +10,14 @@ export function verifyAuth(req, res, next) {
 
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('payloadpayloadpayloadpayload', payload, 'payload')
     // return payload.sub; // This is user ID
-    req.user = payload.sub
+    // req.user = payload.sub
     if (!next) {
       return payload.sub
     }
     else {
-      req.user = {
-        id: payload.sub,
-        role: payload.role, 
-      };
+      req.user = payload.sub;
+      req.role = payload.role;
       next();
     }
   } catch (err) {
