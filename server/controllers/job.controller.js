@@ -14,6 +14,9 @@ export const getJob = asyncHandler(async (req, res) => {
 });
 
 export const createJob = asyncHandler(async (req, res) => {
+  req.body['user'] = req.user;
+
+  console.log(req.user,'dddddddddddddddddddddddd')
   const job = await jobService.createJob(req.body);
   res.status(201).json({ status: "success", data: job });
 });

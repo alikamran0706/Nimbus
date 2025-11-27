@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import { FormGenerator } from '@components/FormGenerator'
 import { Button } from '@components/ui/Button'
 import { Link } from 'react-router-dom'
-import { showAlert } from '@/store/slices/alertSlice'
+// import { showAlert } from '@/store/slices/alertSlice'
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required('Required'),
@@ -77,22 +77,22 @@ export const SignUp = () => {
       label: 'Password',
       type: 'password',
       required: true,
-      placeholder: 'First Name',
+      placeholder: 'Enter Password',
     },
-    { name: 'country', label: 'Country', type: 'text', required: true, placeholder: 'First Name' },
+    { name: 'country', label: 'Country', type: 'text', required: true, placeholder: 'Enter country name' },
     {
       name: 'nationality',
       label: 'Nationality',
       type: 'text',
       required: true,
-      placeholder: 'First Name',
+      placeholder: 'Enter nationality',
     },
     {
       name: 'dateOfBirth',
       label: 'Date of Birth',
       type: 'date',
       required: true,
-      placeholder: 'First Name',
+      placeholder: 'Enter date of birth',
     },
     {
       name: 'agreeToTerms',

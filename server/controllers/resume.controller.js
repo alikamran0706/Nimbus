@@ -1,4 +1,4 @@
-import pdf from "pdf-parse";
+import { PDFParse } from "pdf-parse";
 import mammoth from "mammoth";
 import resumeParserService from "../services/resumeParser.service.js";
 import Resume from "../models/resume.model.js";
@@ -40,8 +40,8 @@ export const parseResumeFile = async (req, res) => {
     let text = "";
 
     if (file.mimetype === "application/pdf") {
-      const pdfData = await pdf(file.buffer);
-      text = pdfData.text;
+      const pdfData = new PDFParse(file.buffer);
+      text = await pdfData.getText();
     } else if (file.mimetype.includes("word")) {
       const result = await mammoth.extractRawText({ buffer: file.buffer });
       text = result.value;

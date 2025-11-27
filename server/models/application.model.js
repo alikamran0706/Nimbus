@@ -2,11 +2,17 @@ import mongoose, { Schema } from "mongoose"
 
 const ApplicationSchema = new Schema(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "User", index: true },
+    user: { type: Schema.Types.ObjectId, ref: "User", index: true },
+    job: { type: Schema.Types.ObjectId, ref: "Job", index: true },
+    candidate: [{ type: mongoose.Schema.Types.ObjectId, ref: "Candidate" }],
     title: String,
     company: String,
     location: String,
-    status: { type: String, default: "submitted" },
+    status: { 
+      type: String, 
+      enum: ["applied", "reviewing", "shortlisted", "interview", "hired", "rejected"],
+      default: "applied",
+     },
     applicationDate: Date,
     lastUpdated: Date,
     description: String,

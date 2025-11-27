@@ -10,6 +10,7 @@ export function verifyAuth(req, res, next) {
 
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
+
     // return payload.sub; // This is user ID
     // req.user = payload.sub
     if (!next) {

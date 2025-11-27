@@ -33,7 +33,6 @@ export const AuthAppService = {
 
     const passwordHash = await bcrypt.hash(data.password, 10)
     const user = await AuthRepository.create({ ...data, passwordHash, isVerified: false })
-    console.log(user, 'sdsd', 'ddddddddd')
 
     return { user: toClient(user) }
   },
@@ -46,16 +45,16 @@ export const AuthAppService = {
     if (!ok) throw new Error("Invalid credentials")
     // const token = sign(user._id)
     const crrentUser = user?._doc
-    const token = signToken({ ...crrentUser, sub: user._id });
+    const token = signToken({ role: user.role, sub: user._id });
     const refreshToken = signRefreshToken(user);
-    return { user: toClient(user), token, refreshToken }
+    return { user: toClient(crrentUser), token, refreshToken }
   },
 
   async verify(email, code) {
     const user = await AuthRepository.verifyByEmail(email, code);
 
     // const token = sign(user._id);
-    const token = signToken({ ...user, sub: user._id });
+    const token = signToken({role: user.role, sub: user._id });
     const refreshToken = signRefreshToken(user);
 
     return { user: toClient(user), token, refreshToken };

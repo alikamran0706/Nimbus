@@ -2,11 +2,47 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { useNavigate } from 'react-router-dom'
+import { TagField } from '@/components/ui/TagField';
+import { jobService } from '@/services/jobService';
+
+type Channels = {
+  email: boolean;
+  whatsapp: boolean;
+};
+
+type Boards = {
+  website: boolean;
+  linkedin: boolean;
+  indeed: boolean;
+  glassdoor: boolean;
+};
+
+interface JobFormData {
+  title: string;
+  industry: string;
+  department: string;
+  location: string;
+  experience: string;
+  jobType: string;
+  contract: string;
+  salaryMin: string,
+  salaryMax: string,
+  joiningDate: string;
+  expiryDate: string;
+  description: string;
+  isDraft: boolean,
+  responsibilities: string;
+  requirements: string[];
+  skills: string[];
+  internalNotes: string;
+  boards: Boards;
+  channels: Channels;
+}
 
 export default function CreateJobPosting() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<JobFormData>({
     title: '',
     industry: '',
     department: '',
@@ -14,14 +50,16 @@ export default function CreateJobPosting() {
     experience: '',
     jobType: '',
     contract: '',
-    salary: '',
     joiningDate: '',
     expiryDate: '',
     description: '',
     responsibilities: '',
-    requirements: '',
-    skills: '',
+    salaryMin: '',
+    salaryMax: '',
+    requirements: [],
+    skills: [],
     internalNotes: '',
+    isDraft: false,
     boards: {
       website: true,
       linkedin: true,
@@ -39,15 +77,34 @@ export default function CreateJobPosting() {
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleCheckbox = (category: string, key: string, value: boolean) => {
-    setFormData((prev: any) => ({
+  const handleCheckbox = (category: "boards" | "channels", key: string, value: boolean) => {
+    setFormData(prev => ({
       ...prev,
       [category]: { ...prev[category], [key]: value },
-    }))
-  }
+    }));
+  };
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault()
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
+    const formattedPayload = {
+      ...formData,
+      salaryRange: {
+        min: Number(formData.salaryMin),
+        max: Number(formData.salaryMax),
+      },
+      channels: Object.keys(formData.channels).filter(key => formData.channels[key as keyof Channels]),
+      jobBoards: Object.keys(formData.boards).filter(key => formData.boards[key as keyof Boards]),
+    };
+
+    try {
+      const response = await jobService.post(formattedPayload)
+
+      alert('sssssssssss')
+      return response;
+    } catch (error: any) {
+      console.log(error, 'ffffffffffffffffffffffffffff')
+    }
     console.log('Form Submitted:', formData)
   }
 
@@ -157,6 +214,7 @@ export default function CreateJobPosting() {
               </label>
               <input
                 name="experience"
+                type='number'
                 placeholder="E.g. 3-5 years"
                 value={formData.experience}
                 onChange={handleChange}
@@ -173,7 +231,9 @@ export default function CreateJobPosting() {
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-xsplus focus:outline-none focus:ring-2 focus:ring-primary-600"
               >
                 <option value="">Select Job Type</option>
-                <option value="full">Full-Time</option>
+                <option value="remote">Remote</option>
+                <option value="onsite">Full-Time</option>
+                <option value="hybrid">Hybrid</option>
                 <option value="part">Part-Time</option>
                 <option value="contract">Contract</option>
               </select>
@@ -186,25 +246,43 @@ export default function CreateJobPosting() {
                 Contract Duration
               </label>
               <input
-                name="experience"
+                name="contract"
+                type='number'
                 placeholder="E.g. 6 months"
-                value={formData.experience}
+                value={formData.contract}
                 onChange={handleChange}
                 className="border border-gray-300 rounded-lg px-3 py-2 text-xsplus 
                 focus:outline-none focus:ring-2 focus:ring-primary-600 w-full"
               />
             </div>
-            <div>
-              <label className="block text-xsplus font-medium text-gray-900 mb-1">
-                Salary Range
-              </label>
-              <input
-                name="salary"
-                placeholder="E.g. $80,000 - $120,000"
-                value={formData.salary}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-xsplus focus:outline-none focus:ring-2 focus:ring-primary-600"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xsplus font-medium text-gray-900 mb-1 block">
+                  Min Salary <span className="text-red-500">*</span>
+                </label>
+                <input
+                  name="salaryMin"
+                  type="number"
+                  placeholder="Min Salary"
+                  value={formData.salaryMin}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-xsplus"
+                />
+              </div>
+
+              <div>
+                <label className="text-xsplus font-medium text-gray-900 mb-1 block">
+                  Max Salary <span className="text-red-500">*</span>
+                </label>
+                <input
+                  name="salaryMax"
+                  type="number"
+                  placeholder="Max Salary"
+                  value={formData.salaryMax}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-xsplus"
+                />
+              </div>
             </div>
           </div>
 
@@ -298,13 +376,27 @@ export default function CreateJobPosting() {
 
           <div>
             <label className="text-xsplus font-medium text-gray-900 mb-1 block">Requirements</label>
-            <textarea
+            {/* <textarea
               name="requirements"
               rows={3}
               placeholder="List the requirements for this role..."
               value={formData.requirements}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-xsplus focus:outline-none focus:ring-2 focus:ring-primary-600"
+            /> */}
+
+            <TagField
+              tags={formData.requirements}
+              maxTags={10}
+              addTag={(tag) =>
+                setFormData((prev: any) => ({ ...prev, requirements: [...prev.requirements, tag] }))
+              }
+              removeTag={(tag) =>
+                setFormData(prev => ({
+                  ...prev,
+                  requirements: prev.requirements.filter(t => t !== tag)
+                }))
+              }
             />
           </div>
 
@@ -312,12 +404,26 @@ export default function CreateJobPosting() {
             <label className="text-xsplus font-medium text-gray-900 mb-1 block">
               Skills (comma separated)
             </label>
-            <input
+            {/* <input
               name="skills"
               placeholder="E.g. React, TypeScript, Node.js"
               value={formData.skills}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-xsplus focus:outline-none focus:ring-2 focus:ring-primary-600"
+            /> */}
+
+            <TagField
+              tags={formData.skills}
+              maxTags={10}
+              addTag={(tag) =>
+                setFormData((prev: any) => ({ ...prev, skills: [...prev.skills, tag] }))
+              }
+              removeTag={(tag) =>
+                setFormData(prev => ({
+                  ...prev,
+                  skills: prev.skills.filter(t => t !== tag)
+                }))
+              }
             />
           </div>
 

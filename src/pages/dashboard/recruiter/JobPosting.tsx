@@ -1,58 +1,6 @@
-import { useState } from 'react'
+import { jobService } from '@/services/jobService'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-
-const jobs = [
-  {
-    id: 1,
-    title: 'Chief Officer',
-    company: 'Marine Crew',
-    location: 'Remote',
-    salary: '$80,000 - $110,000 / year',
-    status: 'Active',
-    applicants: 45,
-    posted: '2 days ago',
-  },
-  {
-    id: 2,
-    title: 'Passenger Ship Staff',
-    company: 'Passenger Ship Dept',
-    location: 'Miami, FL',
-    salary: '$60,000 - $90,000 / year',
-    status: 'Expired',
-    applicants: 17,
-    posted: '1 week ago',
-  },
-  {
-    id: 3,
-    title: 'Restaurant Line Server',
-    company: 'Oceanic Catering',
-    location: 'Onboard Ship',
-    salary: '$50,000 / year',
-    status: 'Active',
-    applicants: 23,
-    posted: '3 days ago',
-  },
-  {
-    id: 4,
-    title: 'Engineer Trainee',
-    company: 'Harbor Marine',
-    location: 'Singapore',
-    salary: '$70,000 / year',
-    status: 'Active',
-    applicants: 12,
-    posted: '5 days ago',
-  },
-  {
-    id: 5,
-    title: 'Steward Supervisor',
-    company: 'Cruise Line',
-    location: 'New York, USA',
-    salary: '$65,000 / year',
-    status: 'Expired',
-    applicants: 8,
-    posted: '1 week ago',
-  },
-]
 
 const stats = [
   {
@@ -80,7 +28,9 @@ const stats = [
 ]
 
 export default function RecruiterJobPostings() {
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [jobs, setJobs] = useState<any>([]);
   const [filters, setFilters] = useState({
     firstName: '',
     lastName: '',
@@ -90,15 +40,32 @@ export default function RecruiterJobPostings() {
   })
 
   const navigate = useNavigate();
-  
-    const onBack = () => {
-      navigate(-1); 
-    };
+
+  const onBack = () => {
+    navigate(-1);
+  };
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFilters(prev => ({ ...prev, [name]: value }))
   }
+
+  const fetchJobs = async () => {
+    setLoading(true)
+    try {
+      const { data } = await jobService.get()
+      setJobs(data);
+      console.log('sssssssddddddddddssss', data, 'sdsd')
+      return data;
+    } catch (error: any) {
+      console.log(error, 'ffffffffffffffffffffffffffff')
+    }
+  }
+
+  useEffect(() => {
+    fetchJobs();
+  }, [filters])
+
   return (
     <div className="px-8 pb-8">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
@@ -278,7 +245,7 @@ export default function RecruiterJobPostings() {
 
           {/* Job List */}
           <div className="space-y-3">
-            {jobs.map(job => (
+            {jobs.map((job: any) => (
               <div
                 key={job.id}
                 className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border border-gray-150 bg-white rounded-md p-4"
@@ -302,48 +269,44 @@ export default function RecruiterJobPostings() {
                     </div>
                     <div className="flex items-center gap-2 text-xs text-gray-600 mt-1">
                       <img src="/svg/gray-dollar.svg" alt="salary" className="w-3 h-3" />
-                      <span>{job.salary}</span>
+                      <span>{job.salaryRange?.min} / {job.salaryRange?.max}</span>
                     </div>
 
-                    <div className="flex flex-col block sm:hidden items-start">
-                  <p className="text-xs text-gray-600 mb-1">{job.posted}</p>
-                  <p className="text-sm text-gray-900 font-medium">{job.applicants} Applicants</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <div
-                      className={`h-2 w-2 rounded-full ${
-                        job.status === 'Active' ? 'bg-green-500' : 'bg-red-500'
-                      }`}
-                    ></div>
-                    <p
-                      className={`text-xs font-medium ${
-                        job.status === 'Active' ? 'text-green-600' : 'text-red-600'
-                      }`}
-                    >
-                      {job.status}
-                    </p>
-                  </div>
-                  <Link to='/recruiter/candidate' className="flex gap-2 items-center">
-                    <p className="text-primary-600 text-sm font-medium">View details</p>
-                    <img src="/svg/red-arrow-down.svg" alt="location" className="w-3 h-3" />
-                  </Link>
-                </div>
+                    <div className="flex flex-col sm:hidden items-start">
+                      <p className="text-xs text-gray-600 mb-1">{job.posted}</p>
+                      <p className="text-sm text-gray-900 font-medium">{job.applicants} Applicants</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <div
+                          className={`h-2 w-2 rounded-full ${job.status === 'Active' ? 'bg-green-500' : 'bg-red-500'
+                            }`}
+                        ></div>
+                        <p
+                          className={`text-xs font-medium ${job.status === 'Active' ? 'text-green-600' : 'text-red-600'
+                            }`}
+                        >
+                          {job.status}
+                        </p>
+                      </div>
+                      <Link to='/recruiter/candidate' className="flex gap-2 items-center">
+                        <p className="text-primary-600 text-sm font-medium">View details</p>
+                        <img src="/svg/red-arrow-down.svg" alt="location" className="w-3 h-3" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
 
                 {/* Right Section */}
-                <div className="flex flex-col hidden sm:block items-end sm:text-right">
+                <div className="flex-col hidden sm:block items-end sm:text-right">
                   <p className="text-xs text-gray-600 mb-1">{job.posted}</p>
                   <p className="text-sm text-gray-900 font-medium">{job.applicants} Applicants</p>
                   <div className="flex items-center gap-2 mt-1">
                     <div
-                      className={`h-2 w-2 rounded-full ${
-                        job.status === 'Active' ? 'bg-green-500' : 'bg-red-500'
-                      }`}
+                      className={`h-2 w-2 rounded-full ${job.status === 'published' ? 'bg-green-500' : 'bg-red-500'
+                        }`}
                     ></div>
                     <p
-                      className={`text-xs font-medium ${
-                        job.status === 'Active' ? 'text-green-600' : 'text-red-600'
-                      }`}
+                      className={`text-xs font-medium ${job.status === 'published' ? 'text-green-600' : 'text-red-600 capitalize'
+                        }`}
                     >
                       {job.status}
                     </p>
