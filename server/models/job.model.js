@@ -2,6 +2,7 @@ import mongoose, { Schema } from "mongoose"
 
 const jobSchema = new Schema(
   {
+    companyName: { type: String, required: true },
     title: { type: String, required: true },
     description: String,
     department: String,
@@ -14,6 +15,7 @@ const jobSchema = new Schema(
     requirements: [String],
     channels: [String],
     jobBoards: [String],
+    benefits: [String],
     experience: Number,
     contract: Number,
     joiningDate: Date,

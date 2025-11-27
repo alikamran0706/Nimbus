@@ -49,6 +49,7 @@ import AdminDataMigration from './pages/admin/DataMigration'
 import AdminAutomaticSchedulingPage from './pages/admin/AutomaticSchedulingPage'
 import CandidateProfile from './pages/admin/CandidateProfile'
 import AdminSupportResources from './pages/admin/SupportResources'
+import JobDetail from './pages/dashboard/recruiter/JobDetail'
 
 function App() {
   const dispatch = useAppDispatch()
@@ -140,6 +141,7 @@ function App() {
           <Route path="jobs" element={<RecruiterJobPostings />} />
           <Route path="create-ai-job" element={<AIJobPostingAssistant />} />
           <Route path="create-job" element={<CreateJobPosting />} />
+          <Route path="job/:id" element={<JobDetail />} />
           
           <Route path="candidates" element={<RecruiterCandidates />} />
           <Route path="messages" element={<RecruiterMessages />} />

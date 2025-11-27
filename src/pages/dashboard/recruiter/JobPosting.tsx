@@ -1,3 +1,4 @@
+import { encryptId } from '@/lib/utils/crypto'
 import { jobService } from '@/services/jobService'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -39,11 +40,11 @@ export default function RecruiterJobPostings() {
     phone: '',
   })
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const onBack = () => {
-    navigate(-1);
-  };
+    navigate(-1)
+  }
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -54,16 +55,14 @@ export default function RecruiterJobPostings() {
     setLoading(true)
     try {
       const { data } = await jobService.get()
-      setJobs(data);
-      console.log('sssssssddddddddddssss', data, 'sdsd')
-      return data;
+      setJobs(data)
+      return data
     } catch (error: any) {
-      console.log(error, 'ffffffffffffffffffffffffffff')
     }
   }
 
   useEffect(() => {
-    fetchJobs();
+    fetchJobs()
   }, [filters])
 
   return (
@@ -235,7 +234,9 @@ export default function RecruiterJobPostings() {
         <div className="font-sans">
           {/* Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2 mt-8">
-            <h2 className="text-lg font-semibold text-gray-900">5 Active Jobs Posted</h2>
+            <h2 className="text-lg font-semibold text-gray-900">
+              {jobs?.length} Active Jobs Posted
+            </h2>
 
             <div className="flex gap-3 text-sm text-gray-600">
               <button className="hover:text-primary-600 font-medium">Sort by:</button>
@@ -245,79 +246,93 @@ export default function RecruiterJobPostings() {
 
           {/* Job List */}
           <div className="space-y-3">
-            {jobs.map((job: any) => (
-              <div
-                key={job.id}
-                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border border-gray-150 bg-white rounded-md p-4"
-              >
-                {/* Left Section */}
-                <div className="flex items-start gap-3 flex-1">
-                  {/* Job Icon */}
-                  <div className="w-10 h-10 bg-primary-50 rounded-md flex items-center justify-center">
-                    <img src="/svg/red-job.svg" alt="job" className="w-5 h-5 object-contain" />
-                  </div>
-
-                  {/* Job Info */}
-                  <div>
-                    <h3 className="text-sm sm:text-base font-semibold text-gray-900 leading-tight">
-                      {job.title}
-                    </h3>
-                    <p className="text-xs text-gray-600">{job.company}</p>
-                    <div className="flex items-center gap-2 text-xs text-gray-600 mt-1">
-                      <img src="/svg/gray-location.svg" alt="location" className="w-3 h-3" />
-                      <span>{job.location}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-gray-600 mt-1">
-                      <img src="/svg/gray-dollar.svg" alt="salary" className="w-3 h-3" />
-                      <span>{job.salaryRange?.min} / {job.salaryRange?.max}</span>
+            {jobs.map((job: any) => {
+              const encrypted = encryptId(job._id);
+              return (
+                <div
+                  key={job.id}
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border border-gray-150 bg-white rounded-md p-4"
+                >
+                  {/* Left Section */}
+                  <div className="flex items-start gap-3 flex-1">
+                    {/* Job Icon */}
+                    <div className="w-10 h-10 bg-primary-50 rounded-md flex items-center justify-center">
+                      <img src="/svg/red-job.svg" alt="job" className="w-5 h-5 object-contain" />
                     </div>
 
-                    <div className="flex flex-col sm:hidden items-start">
-                      <p className="text-xs text-gray-600 mb-1">{job.posted}</p>
-                      <p className="text-sm text-gray-900 font-medium">{job.applicants} Applicants</p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <div
-                          className={`h-2 w-2 rounded-full ${job.status === 'Active' ? 'bg-green-500' : 'bg-red-500'
-                            }`}
-                        ></div>
-                        <p
-                          className={`text-xs font-medium ${job.status === 'Active' ? 'text-green-600' : 'text-red-600'
-                            }`}
-                        >
-                          {job.status}
-                        </p>
+                    {/* Job Info */}
+                    <div>
+                      <h3 className="text-sm sm:text-base font-semibold text-gray-900 leading-tight">
+                        {job.title}
+                      </h3>
+                      <p className="text-xs text-gray-600">{job.company}</p>
+                      <div className="flex items-center gap-2 text-xs text-gray-600 mt-1">
+                        <img src="/svg/gray-location.svg" alt="location" className="w-3 h-3" />
+                        <span>{job.location}</span>
                       </div>
-                      <Link to='/recruiter/candidate' className="flex gap-2 items-center">
-                        <p className="text-primary-600 text-sm font-medium">View details</p>
-                        <img src="/svg/red-arrow-down.svg" alt="location" className="w-3 h-3" />
-                      </Link>
+                      <div className="flex items-center gap-2 text-xs text-gray-600 mt-1">
+                        <img src="/svg/gray-dollar.svg" alt="salary" className="w-3 h-3" />
+                        <span>
+                          {job.salaryRange?.min} / {job.salaryRange?.max}
+                        </span>
+                      </div>
+
+                      <div className="flex flex-col sm:hidden items-start">
+                        <p className="text-xs text-gray-600 mb-1">{job.posted}</p>
+                        <p className="text-sm text-gray-900 font-medium">
+                          {job.applicants} Applicants
+                        </p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <div
+                            className={`h-2 w-2 rounded-full ${
+                              job.status === 'Active' ? 'bg-green-500' : 'bg-red-500'
+                            }`}
+                          ></div>
+                          <p
+                            className={`text-xs font-medium ${
+                              job.status === 'Active' ? 'text-green-600' : 'text-red-600'
+                            }`}
+                          >
+                            {job.status}
+                          </p>
+                        </div>
+                        <Link to="/recruiter/candidate" className="flex gap-2 items-center">
+                          <p className="text-primary-600 text-sm font-medium">View details</p>
+                          <img src="/svg/red-arrow-down.svg" alt="location" className="w-3 h-3" />
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Right Section */}
-                <div className="flex-col hidden sm:block items-end sm:text-right">
-                  <p className="text-xs text-gray-600 mb-1">{job.posted}</p>
-                  <p className="text-sm text-gray-900 font-medium">{job.applicants} Applicants</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <div
-                      className={`h-2 w-2 rounded-full ${job.status === 'published' ? 'bg-green-500' : 'bg-red-500'
+                  {/* Right Section */}
+                  <div className="flex-col hidden sm:block items-end sm:text-right">
+                    <p className="text-xs text-gray-600 mb-1">{job.posted}</p>
+                    <p className="text-sm text-gray-900 font-medium">{job.applicants} Applicants</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <div
+                        className={`h-2 w-2 rounded-full ${
+                          job.status === 'published' ? 'bg-green-500' : 'bg-red-500'
                         }`}
-                    ></div>
-                    <p
-                      className={`text-xs font-medium ${job.status === 'published' ? 'text-green-600' : 'text-red-600 capitalize'
+                      ></div>
+                      <p
+                        className={`text-xs font-medium ${
+                          job.status === 'published' ? 'text-green-600' : 'text-red-600 capitalize'
                         }`}
+                      >
+                        {job.status}
+                      </p>
+                    </div>
+                    <Link
+                      to={`/recruiter/job/${encodeURIComponent(encrypted)}`}
+                      className="flex gap-2 items-center"
                     >
-                      {job.status}
-                    </p>
+                      <p className="text-primary-600 text-sm font-medium">View details</p>
+                      <img src="/svg/red-arrow-down.svg" alt="location" className="w-3 h-3" />
+                    </Link>
                   </div>
-                  <Link to='/recruiter/candidate' className="flex gap-2 items-center">
-                    <p className="text-primary-600 text-sm font-medium">View details</p>
-                    <img src="/svg/red-arrow-down.svg" alt="location" className="w-3 h-3" />
-                  </Link>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </div>

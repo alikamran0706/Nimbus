@@ -19,6 +19,7 @@ type Boards = {
 
 interface JobFormData {
   title: string;
+  companyName: string;
   industry: string;
   department: string;
   location: string;
@@ -33,6 +34,7 @@ interface JobFormData {
   isDraft: boolean,
   responsibilities: string;
   requirements: string[];
+  benefits: string[];
   skills: string[];
   internalNotes: string;
   boards: Boards;
@@ -44,6 +46,7 @@ export default function CreateJobPosting() {
 
   const [formData, setFormData] = useState<JobFormData>({
     title: '',
+    companyName: '',
     industry: '',
     department: '',
     location: '',
@@ -57,6 +60,7 @@ export default function CreateJobPosting() {
     salaryMin: '',
     salaryMax: '',
     requirements: [],
+    benefits: [],
     skills: [],
     internalNotes: '',
     isDraft: false,
@@ -144,6 +148,21 @@ export default function CreateJobPosting() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* 1st Row */}
+          <div className="grid grid-cols-1 gap-4">
+             <div>
+              <label className="text-xsplus font-medium text-gray-900 mb-1 block">
+                Company Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                name="companyName"
+                placeholder="E.g. XYZ"
+                value={formData.companyName}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-xsplus focus:outline-none focus:ring-2 focus:ring-primary-600"
+              />
+            </div>
+          </div>
+          
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-xsplus font-medium text-gray-900 mb-1 block">
@@ -395,6 +414,25 @@ export default function CreateJobPosting() {
                 setFormData(prev => ({
                   ...prev,
                   requirements: prev.requirements.filter(t => t !== tag)
+                }))
+              }
+            />
+          </div>
+
+          <div>
+            <label className="text-xsplus font-medium text-gray-900 mb-1 block">
+              Benefits (comma separated)
+            </label>
+            <TagField
+              tags={formData.benefits}
+              maxTags={10}
+              addTag={(tag) =>
+                setFormData((prev: any) => ({ ...prev, benefits: [...prev.benefits, tag] }))
+              }
+              removeTag={(tag) =>
+                setFormData(prev => ({
+                  ...prev,
+                  benefits: prev.benefits.filter(t => t !== tag)
                 }))
               }
             />
