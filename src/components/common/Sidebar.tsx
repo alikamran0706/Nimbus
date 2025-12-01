@@ -13,10 +13,10 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
     <nav className="space-y-2">
       <NavLink
         onClick={onNavigate}
-        to="/applications"
+        to="/jobs"
         className={({ isActive }) =>
           isActive
-            ? 'flex items-center gap-3 px-4 py-3 bg-red-50 text-red-600 rounded-lg font-medium'
+            ? 'flex items-center gap-3 px-4 py-3 bg-red-50 text-primary-600 rounded-lg font-medium'
             : 'flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg'
         }
       >
@@ -24,10 +24,10 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
           <>
             <img
               src={isActive ? '/images/active-application.png' : '/images/application.png'}
-              alt="Applications"
+              alt="Jobs"
               className="h-5 w-5"
             />
-            Applications
+            Jobs
           </>
         )}
       </NavLink>
@@ -36,7 +36,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
         to="/resume"
         className={({ isActive }) =>
           isActive
-            ? 'flex items-center gap-3 px-4 py-3 bg-red-50 text-red-600 rounded-lg font-medium'
+            ? 'flex items-center gap-3 px-4 py-3 bg-red-50 text-primary-600 rounded-lg font-medium'
             : 'flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg'
         }
       >
@@ -56,7 +56,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
         to="/communications"
         className={({ isActive }) =>
           isActive
-            ? 'flex items-center gap-3 px-4 py-3 bg-red-50 text-red-600 rounded-lg font-medium'
+            ? 'flex items-center gap-3 px-4 py-3 bg-red-50 text-primary-600 rounded-lg font-medium'
             : 'flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg'
         }
       >
@@ -76,7 +76,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
         to="/settings"
         className={({ isActive }) =>
           isActive
-            ? 'flex items-center gap-3 px-4 py-3 bg-red-50 text-red-600 rounded-lg font-medium'
+            ? 'flex items-center gap-3 px-4 py-3 bg-red-50 text-primary-600 rounded-lg font-medium'
             : 'flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg'
         }
       >
@@ -142,7 +142,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               <span className="text-base font-semibold">Menu</span>
               <button
                 onClick={onClose}
-                className="rounded-md p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-600"
+                className="rounded-md p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-600"
                 aria-label="Close sidebar"
               >
                 X

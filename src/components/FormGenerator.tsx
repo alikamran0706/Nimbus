@@ -21,7 +21,7 @@ type FormGeneratorProps = {
 export const FormGenerator = ({ fields }: FormGeneratorProps) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {fields.map(field => {
+      {fields.map((field, index) => {
         const commonProps = {
           key: field.name,
           name: field.name,
@@ -40,6 +40,7 @@ export const FormGenerator = ({ fields }: FormGeneratorProps) => {
             ) : (
               <InputField
                 {...commonProps}
+                key={index}
                 type={field.type}
                 placeholder={field.placeholder}
                 required={field.required}

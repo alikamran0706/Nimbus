@@ -143,7 +143,7 @@ export default function AdminAuditLogs() {
               <select
                 value={actionFilter}
                 onChange={e => setActionFilter(e.target.value)}
-                className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-600"
+                className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-600"
               >
                 <option>All Actions</option>
                 <option>User Created</option>
@@ -172,7 +172,7 @@ export default function AdminAuditLogs() {
             <div className="flex items-end justify-end">
               <Button
                 label="Apply Filters"
-                className="bg-red-600 hover:bg-red-700 text-white flex items-center justify-center gap-2 px-3 py-2 text-sm rounded-lg"
+                className="bg-primary-600 hover:bg-red-700 text-white flex items-center justify-center gap-2 px-3 py-2 text-sm rounded-lg"
                 startIcon={<img src="/svg/white-filter.svg" alt="filter" className="w-4 h-4" />}
               />
             </div>

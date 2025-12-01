@@ -66,14 +66,14 @@ const PrivacyTab = () => {
                     className={`w-[18px] h-[18px] border-2 border-gray-300 rounded-full flex items-center justify-center 
                     ${
                       selectedNotification === key
-                        ? 'bg-white border-red-600'
+                        ? 'bg-white border-primary-600'
                         : 'bg-white border-gray-300'
                     }
-                    peer-checked:bg-white-600 peer-checked:border-red-600 peer-focus:ring-2 peer-focus:ring-red-300`}
+                    peer-checked:bg-white-600 peer-checked:border-primary-600 peer-focus:ring-2 peer-focus:ring-red-300`}
                   >
                     <div
                       className={`w-[12px] h-[12px] rounded-full ${
-                        selectedNotification === key ? 'bg-red-600' : 'bg-transparent'
+                        selectedNotification === key ? 'bg-primary-600' : 'bg-transparent'
                       }`}
                     ></div>
                   </div>
@@ -113,8 +113,8 @@ const PrivacyTab = () => {
                     className="sr-only peer"
                   />
                   <div
-                    className="w-[18px] h-[18px] border-2 border-gray-300 rounded-sm peer-checked:bg-red-600 
-                    peer-checked:border-red-600 flex items-center justify-center peer-focus:ring-2 
+                    className="w-[18px] h-[18px] border-2 border-gray-300 rounded-sm peer-checked:bg-primary-600 
+                    peer-checked:border-primary-600 flex items-center justify-center peer-focus:ring-2 
                     peer-focus:ring-red-300"
                   >
                     <svg
@@ -201,14 +201,14 @@ const PrivacyTab = () => {
                     className={`w-[18px] h-[18px] border-2 border-gray-300 rounded-full flex items-center justify-center 
                     ${
                       selectedNotification === key
-                        ? 'bg-white border-red-600'
+                        ? 'bg-white border-primary-600'
                         : 'bg-white border-gray-300'
                     }
-                    peer-checked:bg-white-600 peer-checked:border-red-600 peer-focus:ring-2 peer-focus:ring-red-300`}
+                    peer-checked:bg-white-600 peer-checked:border-primary-600 peer-focus:ring-2 peer-focus:ring-red-300`}
                   >
                     <div
                       className={`w-[12px] h-[12px] rounded-full ${
-                        selectedNotification === key ? 'bg-red-600' : 'bg-transparent'
+                        selectedNotification === key ? 'bg-primary-600' : 'bg-transparent'
                       }`}
                     ></div>
                   </div>

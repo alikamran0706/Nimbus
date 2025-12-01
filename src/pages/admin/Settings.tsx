@@ -1,16 +1,16 @@
-import Navbar from "../../components/Navbar"
+// import Navbar from "@/components/Navbar"
 
 export default function AdminSettings() {
-  const navItems = [
-    { label: "Dashboard", path: "/admin/dashboard" },
-    { label: "Users", path: "/admin/users" },
-    { label: "Reports", path: "/admin/reports" },
-    { label: "Settings", path: "/admin/settings" },
-  ]
+  // const navItems = [
+  //   { label: "Dashboard", path: "/admin/dashboard" },
+  //   { label: "Users", path: "/admin/users" },
+  //   { label: "Reports", path: "/admin/reports" },
+  //   { label: "Settings", path: "/admin/settings" },
+  // ]
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar title="Settings" navItems={navItems} />
+      {/* <Navbar title="Settings" navItems={navItems} /> */}
 
       <main className="px-4 sm:px-6 lg:px-8 py-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">System Settings</h2>
@@ -27,12 +27,12 @@ export default function AdminSettings() {
               <input
                 type="text"
                 defaultValue={setting.value}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent outline-none"
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent outline-none"
               />
             </div>
           ))}
 
-          <button className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-medium transition-colors mt-6">
+          <button className="w-full bg-primary-600 hover:bg-primary-700 text-white py-2 rounded-lg font-medium transition-colors mt-6">
             Save Settings
           </button>
         </div>

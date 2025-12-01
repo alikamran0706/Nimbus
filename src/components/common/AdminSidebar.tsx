@@ -33,7 +33,7 @@ function AdminNavList({ onNavigate }: { onNavigate?: () => void }) {
             `flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg transition-all
             ${
               isActive
-                ? "bg-red-50 text-red-600"
+                ? "bg-red-50 text-primary-600"
                 : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
             }`
           }
@@ -61,7 +61,7 @@ function SidebarFooter({ onLogout }: { onLogout: () => void }) {
     <div className="mt-auto border-t border-gray-100 px-8 py-3">
       <button
         onClick={onLogout}
-        className="flex items-center gap-3 text-gray-700 hover:text-red-600 transition-colors w-full"
+        className="flex items-center gap-3 text-gray-700 hover:text-primary-600 transition-colors w-full"
       >
         <img src="/svg/lock.svg" alt="logout" className="h-5 w-5" />
         <span className="text-sm font-medium">Sign out</span>

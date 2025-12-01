@@ -1,13 +1,17 @@
-import { decryptId } from '@/lib/utils/crypto'
+import Loading from '@/components/Loading'
+import { decrypt, encrypt } from '@/lib/utils/crypto'
 import { jobService } from '@/services/jobService'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const JobDetail = () => {
-  const { id } = useParams()
-  const decryptedId = decryptId(id as string)
-  const [loading, setLoading] = useState(false)
-  const [job, setJob] = useState<any>(null)
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const decryptedId = decrypt(id as string);
+  const [loading, setLoading] = useState(true);
+  const [job, setJob] = useState<any>(null);
+
+  console.log(job)
 
   const fetchJobById = async () => {
     setLoading(true)
@@ -15,39 +19,56 @@ const JobDetail = () => {
       const { data } = await jobService.getById(decryptedId)
       setJob(data)
       return data
-    } catch (error: any) {}
+    } catch (error: any) {
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
     fetchJobById()
   }, [])
 
-  if (loading && job === null) return <></>
+  if (loading) return <Loading />
 
   return (
-    <div>
-      <div className="text-center bg-green-50 border border-green-100 rounded-tr-lg rounded-tl-lg py-4">
-        <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mb-4">
-          <img src="/svg/circle-green-tick.svg" alt="upload" className="w-6 h-6" />
+    <div className="px-8 py-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate(-1)}>
+          <button className="text-gray-600 hover:text-gray-900">
+            <img src={'/svg/gray-back-arrow.svg'} alt="icon" />
+          </button>
+          <span className="text-base text-gray-700 font-medium">Back</span>
         </div>
-        <h2 className="text-2xl font-bold text-gray-900">Job Information Collected</h2>
-        <p className="text-gray-600 mt-2">
-          We've gathered the following information for your job posting. Continue to edit fine-tune
-          the details.
-        </p>
+        <button
+          className="flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg text-sm 
+            font-medium hover:bg-primary-700 transition gap-1"
+          onClick={() => {
+            const encryptedJob = encrypt(JSON.stringify(job))
+            navigate(`/recruiter/create-job?job=${encodeURIComponent(encryptedJob)}`)
+          }}
+        >
+          <img src={'/svg/white-pencil.svg'} alt="icon" className="mr-1" />
+          <p>Edit</p>
+        </button>
       </div>
 
-      <div className="bg-white rounded-br-lg rounded-bl-lg mb-8 border-b border-l border-r border-gray-150">
-        <div className="py-6 px-6 lg:px-20 space-y-6">
+      <div
+        className="bg-white rounded-lg mb-8 border 
+        border-gray-150"
+      >
+        <div className="p-6 space-y-6">
           <div className="border border-gray-150 bg-gray-40 rounded-lg p-4">
             <h3 className="text-sm font-medium text-gray-600 mb-1">Job Title</h3>
             <p className="text-lg font-semibold text-gray-900">{job?.title}</p>
           </div>
 
-          <div className="border border-gray-150 bg-gray-40 rounded-lg p-4">
-            <h3 className="text-sm font-medium text-gray-600 mb-1">Company</h3>
-            <p className="text-lg font-semibold text-gray-900">{job?.companyName}</p>
-          </div>
+          {job?.companyName && (
+            <div className="border border-gray-150 bg-gray-40 rounded-lg p-4">
+              <h3 className="text-sm font-medium text-gray-600 mb-1">Company</h3>
+              <p className="text-lg font-semibold text-gray-900">{job?.companyName}</p>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="border border-gray-150 bg-gray-40 rounded-lg p-4">
@@ -60,7 +81,7 @@ const JobDetail = () => {
             </div>
             <div className="border border-gray-150 bg-gray-40 rounded-lg p-4">
               <h3 className="text-sm font-medium text-gray-600 mb-1">Salary</h3>
-              {/* <p className="text-lg font-semibold text-gray-900">{job.salaryRange}</p> */}
+              <p className="text-lg font-semibold text-gray-900">{job.salaryRange?.max} / {job.salaryRange?.min}</p>
             </div>
           </div>
 
@@ -75,6 +96,17 @@ const JobDetail = () => {
               {job?.requirements.map((req: string, index: number) => (
                 <li key={index} className="text-gray-700">
                   {req}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="border border-gray-150 bg-gray-40 rounded-lg p-4">
+            <h3 className="text-sm font-medium text-gray-600 mb-2">Skills</h3>
+            <ul className="list-disc list-inside space-y-1">
+              {job?.skills.map((skill: string, index: number) => (
+                <li key={index} className="text-gray-700">
+                  {skill}
                 </li>
               ))}
             </ul>

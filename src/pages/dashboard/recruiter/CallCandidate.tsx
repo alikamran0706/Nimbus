@@ -75,7 +75,7 @@ export default function CandidateCall() {
           {/* Left Panel — Candidate Info */}
           <div className="p-6">
             <div className="flex flex-col items-center text-center mb-6">
-              <div className="w-24 h-24 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center text-white text-4xl font-bold">
+              <div className="w-24 h-24 bg-gradient-to-br from-red-400 to-primary-600 rounded-full flex items-center justify-center text-white text-4xl font-bold">
                 AJ
               </div>
               <h2 className="mt-4 text-xl font-bold text-gray-900">{candidate.name}</h2>
@@ -101,7 +101,7 @@ export default function CandidateCall() {
               <p className="text-sm text-gray-600 mb-3">
                 AI is analyzing real-time responses to adjust the interview dynamically.
               </p>
-              <p className="text-sm text-red-600 font-medium cursor-pointer hover:underline flex gap-2 items-center">
+              <p className="text-sm text-primary-600 font-medium cursor-pointer hover:underline flex gap-2 items-center">
                 <img src="/svg/red-message.svg" alt="volume" className="w-5 h-5" /> AI analyzing the conversation
               </p>
             </div>
@@ -127,7 +127,7 @@ export default function CandidateCall() {
               />
               <Button
                 variant="primary"
-                className="rounded-full w-12 h-12 bg-red-600 hover:bg-red-700"
+                className="rounded-full w-12 h-12 bg-primary-600 hover:bg-red-700"
                 onClick={() => setCallActive(false)}
                 startIcon={
                   <img src="/svg/white-phone.svg" alt="end call" className="w-5 h-5" />

@@ -47,7 +47,7 @@ export const InputField = ({
       <ErrorMessage
         name={name}
         component="div"
-        className="text-base placeholder:text-sm placeholder:text-gray-200 text-red-600 mt-1"
+        className="text-base placeholder:text-sm placeholder:text-gray-200 text-primary-600 mt-1"
       />
     </div>
   )

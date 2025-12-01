@@ -10,8 +10,6 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const { isAuthenticated, isLoading, user } = useAppSelector((state) => state.auth)
   const location = useLocation();
 
-  console.log('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
-  console.log(user?.role,'ddddd')
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">

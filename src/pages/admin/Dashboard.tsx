@@ -96,7 +96,7 @@ export default function AdminDashboard() {
         formatter: (val: number) => `${val}`,
       },
     },
-    colors: ['#0d76ffff', '#10B981'], // red-600, green-500
+    colors: ['#0d76ffff', '#10B981'], // primary-600, green-500
     legend: {
       position: 'top',
       horizontalAlign: 'right',
@@ -121,7 +121,7 @@ export default function AdminDashboard() {
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Admin Dashboard</h1>
         </div>
         <div>
-          <select className="border border-gray-300 text-sm rounded-md px-2 py-1 text-gray-700 focus:ring-2 focus:ring-red-600">
+          <select className="border border-gray-300 text-sm rounded-md px-2 py-1 text-gray-700 focus:ring-2 focus:ring-primary-600">
             <option>Last 7 days</option>
             <option>Last 30 days</option>
             <option>This Month</option>
@@ -144,7 +144,7 @@ export default function AdminDashboard() {
               <div className="text-2xl font-bold text-gray-900 mt-2">{item.value}</div>
               <div
                 className={`text-sm mt-1 ${
-                  item.change.includes('-') ? 'text-red-600' : 'text-green-600'
+                  item.change.includes('-') ? 'text-primary-600' : 'text-green-600'
                 }`}
               >
                 {item.change}

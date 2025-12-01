@@ -47,7 +47,7 @@ export default function ScheduleInterviewModal({ isOpen, onClose }: ScheduleInte
                     type="checkbox"
                     checked={selectedInterviewers.includes(String(interviewer.id))}
                     onChange={() => toggleInterviewer(String(interviewer.id))}
-                    className="w-4 h-4 text-red-600 rounded"
+                    className="w-4 h-4 text-primary-600 rounded"
                   /> */}
                   <div>
                     <p className="font-medium text-gray-900">{interviewer.name}</p>
@@ -71,7 +71,7 @@ export default function ScheduleInterviewModal({ isOpen, onClose }: ScheduleInte
           </label>
           <input
             type="datetime-local"
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-red-600"
+            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-600"
           />
         </div> */}
 
@@ -84,7 +84,7 @@ export default function ScheduleInterviewModal({ isOpen, onClose }: ScheduleInte
           </button>
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition"
+            className="flex-1 px-4 py-2 bg-primary-600 hover:bg-red-700 text-white font-semibold rounded-lg transition"
           >
             Confirm Interview
           </button>
@@ -103,7 +103,7 @@ export default function ScheduleInterviewModal({ isOpen, onClose }: ScheduleInte
               onChange={handleNotificationChange}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-red-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-red-300">
+            <div className="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-primary-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-red-300">
               <div className="absolute top-[2px] left-[2px] w-5 h-5 bg-white border-gray-300 border rounded-full transition-all peer-checked:translate-x-5"></div>
             </div>
           </label>

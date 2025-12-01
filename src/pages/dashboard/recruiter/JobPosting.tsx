@@ -1,4 +1,4 @@
-import { encryptId } from '@/lib/utils/crypto'
+import { encrypt } from '@/lib/utils/crypto'
 import { jobService } from '@/services/jobService'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -66,7 +66,7 @@ export default function RecruiterJobPostings() {
   }, [filters])
 
   return (
-    <div className="px-8 pb-8">
+    <div className="px-8 py-8">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
         <div>
           <button className="flex items-center gap-x-1" onClick={onBack}>
@@ -79,7 +79,7 @@ export default function RecruiterJobPostings() {
         </div>
         <Link
           to="/recruiter/create-job"
-          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-center w-full sm:w-auto"
+          className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-center w-full sm:w-auto"
         >
           + New Job Posting
         </Link>
@@ -109,10 +109,10 @@ export default function RecruiterJobPostings() {
 
       <div className="px-4 sm:px-6 py-4 bg-white rounded-md border border-gray-150 mb-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-          <button className="text-sm text-gray-900 flex items-center gap-2">
+          <div className="text-sm text-gray-900 flex items-center gap-2">
             <img src={'/svg/gray-filter.svg'} className="w-4 h-4" alt="icon" />
             Filter jobs
-          </button>
+          </div>
           <button className="text-sm text-primary-500 hover:text-red-700">Clear all filters</button>
         </div>
 
@@ -247,7 +247,7 @@ export default function RecruiterJobPostings() {
           {/* Job List */}
           <div className="space-y-3">
             {jobs.map((job: any) => {
-              const encrypted = encryptId(job._id);
+              const encrypted = encrypt(job._id);
               return (
                 <div
                   key={job.id}
@@ -289,8 +289,8 @@ export default function RecruiterJobPostings() {
                             }`}
                           ></div>
                           <p
-                            className={`text-xs font-medium ${
-                              job.status === 'Active' ? 'text-green-600' : 'text-red-600'
+                            className={`text-xs font-medium capitalize ${
+                              job.status === 'published' ? 'text-green-600' : 'text-primary-600'
                             }`}
                           >
                             {job.status}
@@ -307,21 +307,22 @@ export default function RecruiterJobPostings() {
                   {/* Right Section */}
                   <div className="flex-col hidden sm:block items-end sm:text-right">
                     <p className="text-xs text-gray-600 mb-1">{job.posted}</p>
-                    <p className="text-sm text-gray-900 font-medium">{job.applicants} Applicants</p>
-                    <div className="flex items-center gap-2 mt-1">
+                    <p className="text-sm text-gray-900 font-medium">{job.applicants?.length} Applicants</p>
+                    <div className="flex items-center gap-2 mt-1 justify-end">
                       <div
                         className={`h-2 w-2 rounded-full ${
                           job.status === 'published' ? 'bg-green-500' : 'bg-red-500'
                         }`}
                       ></div>
                       <p
-                        className={`text-xs font-medium ${
-                          job.status === 'published' ? 'text-green-600' : 'text-red-600 capitalize'
+                        className={`text-xs font-medium capitalize ${
+                          job.status === 'published' ? 'text-green-600' : 'text-primary-600'
                         }`}
                       >
                         {job.status}
                       </p>
                     </div>
+                    
                     <Link
                       to={`/recruiter/job/${encodeURIComponent(encrypted)}`}
                       className="flex gap-2 items-center"

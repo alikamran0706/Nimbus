@@ -66,7 +66,7 @@ export default function AdminUserManagement() {
       <div className="flex justify-between items-center">
         <h1 className="text-base font-bold text-gray-900">User Management</h1>
         <Button
-          className="bg-red-600 hover:bg-red-700 text-white flex items-center gap-2 rounded-lg"
+          className="bg-primary-600 hover:bg-red-700 text-white flex items-center gap-2 rounded-lg"
           startIcon={<img src="/svg/white-plus.svg" alt="add" className="w-4 h-4" />}
           label="Add User"
         />
@@ -84,7 +84,7 @@ export default function AdminUserManagement() {
                 <select
                   value={roleFilter}
                   onChange={e => setRoleFilter(e.target.value)}
-                  className="mt-1 border border-gray-300 rounded-lg px-3 py-2 w-full h-[42px] text-sm focus:ring-2 focus:ring-red-600"
+                  className="mt-1 border border-gray-300 rounded-lg px-3 py-2 w-full h-[42px] text-sm focus:ring-2 focus:ring-primary-600"
                 >
                   <option>All Roles</option>
                   <option>Admin</option>
@@ -99,7 +99,7 @@ export default function AdminUserManagement() {
                 <select
                   value={statusFilter}
                   onChange={e => setStatusFilter(e.target.value)}
-                  className="mt-1 border border-gray-300 rounded-lg px-3 py-2 w-full h-[42px] text-sm focus:ring-2 focus:ring-red-600"
+                  className="mt-1 border border-gray-300 rounded-lg px-3 py-2 w-full h-[42px] text-sm focus:ring-2 focus:ring-primary-600"
                 >
                   <option>All Statuses</option>
                   <option value="active">Active</option>

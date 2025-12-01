@@ -1,7 +1,7 @@
 import UserModel from "../models/user.model.js"
 import nodemailer from "nodemailer"
-import dotenv from "dotenv";
 import { connectDB } from "../db/connect.js";
+import dotenv from "dotenv";
 
 dotenv.config();
 

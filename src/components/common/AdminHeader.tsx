@@ -19,7 +19,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
             <button
               type="button"
               onClick={onMenuClick}
-              className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-600"
+              className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-600"
               aria-label="Open sidebar"
               aria-controls="mobile-sidebar"
             >
@@ -51,7 +51,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
               {/* Desktop Right Section - Notifications and User */}
               <div className="hidden lg:flex items-center gap-3 sm:gap-4">
                 {/* Notification Button */}
-                <button className="relative p-2 text-gray-600 hover:text-red-600 transition-colors">
+                <button className="relative p-2 text-gray-600 hover:text-primary-600 transition-colors">
                   <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
@@ -61,7 +61,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
                     />
                   </svg>
                   {notificationCount > 0 && (
-                    <span className="absolute top-3 right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                    <span className="absolute top-3 right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-primary-600 rounded-full">
                       {notificationCount}
                     </span>
                   )}
@@ -70,7 +70,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
                 {/* Logout Button */}
                 {/* <button
                                 onClick={handleLogout}
-                                className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+                                className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-white bg-primary-600 hover:bg-red-700 rounded-lg transition-colors"
                               >
                                 Logout
                               </button> */}

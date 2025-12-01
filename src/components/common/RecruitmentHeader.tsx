@@ -8,9 +8,10 @@ import UserDropdown from './RecruiterDropdown'
 interface NavbarProps {
   title: string
   navItems: Array<{ label: string; path: string }>
+  id: any
 }
 
-export default function Navbar({ title, navItems }: NavbarProps) {
+export default function Navbar({ id, navItems }: NavbarProps) {
   const { user } = useAppSelector(state => state.auth)
   const dispatch = useAppDispatch()
 
@@ -38,7 +39,7 @@ export default function Navbar({ title, navItems }: NavbarProps) {
 
   return (
     <>
-      <nav className="bg-white border-b border-gray-150 sticky top-0 z-50">
+      <nav id={id} className="bg-white border-b border-gray-150 sticky top-0 z-50">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-4">
             {/* Logo */}
@@ -57,7 +58,7 @@ export default function Navbar({ title, navItems }: NavbarProps) {
                   to={item.path}
                   className={({ isActive }) =>
                     isActive
-                      ? 'flex items-center gap-3 text-red-600 font-medium'
+                      ? 'flex items-center gap-3 text-primary-600 font-medium'
                       : 'flex items-center gap-3 text-gray-700 hover:tex-primary-600'
                   }
                 >
@@ -99,7 +100,7 @@ export default function Navbar({ title, navItems }: NavbarProps) {
             {/* Desktop Right Section - Notifications and User */}
             <div className="hidden lg:flex items-center gap-3 sm:gap-4">
               {/* Notification Button */}
-              <button className="relative p-2 text-gray-600 hover:text-red-600 transition-colors">
+              <button className="relative p-2 text-gray-600 hover:text-primary-600 transition-colors">
                 <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
@@ -109,7 +110,7 @@ export default function Navbar({ title, navItems }: NavbarProps) {
                   />
                 </svg>
                 {notificationCount > 0 && (
-                  <span className="absolute top-3 right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                  <span className="absolute top-3 right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-primary-600 rounded-full">
                     {notificationCount}
                   </span>
                 )}
@@ -117,7 +118,7 @@ export default function Navbar({ title, navItems }: NavbarProps) {
 
               {/* User Profile */}
               <div className="flex items-center gap-2 sm:gap-3">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-red-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                   {user?.firstName?.charAt(0).toUpperCase() || 'U'}
                 </div>
                 <div className="hidden sm:flex flex-row">
@@ -132,7 +133,7 @@ export default function Navbar({ title, navItems }: NavbarProps) {
               {/* Logout Button */}
               {/* <button
                 onClick={handleLogout}
-                className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+                className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-white bg-primary-600 hover:bg-red-700 rounded-lg transition-colors"
               >
                 Logout
               </button> */}
@@ -140,7 +141,7 @@ export default function Navbar({ title, navItems }: NavbarProps) {
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 text-gray-600 hover:text-red-600 transition-colors"
+              className="lg:hidden p-2 text-gray-600 hover:text-primary-600 transition-colors"
             >
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -171,7 +172,7 @@ export default function Navbar({ title, navItems }: NavbarProps) {
           {/* Close Button */}
           <button
             onClick={() => setMobileMenuOpen(false)}
-            className="absolute top-4 right-4 p-2 text-gray-600 hover:text-red-600"
+            className="absolute top-4 right-4 p-2 text-gray-600 hover:text-primary-600"
           >
             <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -189,7 +190,7 @@ export default function Navbar({ title, navItems }: NavbarProps) {
               <button
                 key={item.path}
                 onClick={() => handleNavClick(item.path)}
-                className="w-full text-left px-4 py-2 text-gray-600 hover:text-red-600 hover:bg-gray-50 rounded-lg transition-colors font-medium"
+                className="w-full text-left px-4 py-2 text-gray-600 hover:text-primary-600 hover:bg-gray-50 rounded-lg transition-colors font-medium"
               >
                 {item.label}
               </button>
@@ -225,7 +226,7 @@ export default function Navbar({ title, navItems }: NavbarProps) {
           {/* Mobile User Info */}
           <div className="border-t border-gray-200 pt-4 mt-4">
             <Link to='/recruiter/profile' className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-white font-semibold">
+              <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-semibold">
                 {user?.firstName?.charAt(0).toUpperCase() || 'U'}
               </div>
               <div className="flex flex-col">
@@ -257,7 +258,7 @@ export default function Navbar({ title, navItems }: NavbarProps) {
             {/* Mobile Logout Button */}
             <button
               onClick={handleLogout}
-              className="w-full px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+              className="w-full px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-red-700 rounded-lg transition-colors"
             >
               Logout
             </button>

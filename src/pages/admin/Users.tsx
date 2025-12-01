@@ -40,7 +40,7 @@ export default function AdminUsers() {
                     <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">Active</span>
                   </td>
                   <td className="px-6 py-4 text-sm">
-                    <button className="text-red-600 hover:text-red-700 font-medium">Edit</button>
+                    <button className="text-primary-600 hover:text-primary-700 font-medium">Edit</button>
                   </td>
                 </tr>
               ))}

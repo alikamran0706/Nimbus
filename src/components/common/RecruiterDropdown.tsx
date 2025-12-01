@@ -60,7 +60,7 @@ export default function UserDropdown({ user }: { user: any }) {
               <Link to={'/recruiter/settings'} className="w-full text-left px-4 py-2 hover:bg-gray-100">Settings</Link>
             </li>
             <li>
-              <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+              <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-primary-600 hover:bg-gray-100">
                 Sign Out
               </button>
             </li>

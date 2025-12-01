@@ -38,7 +38,7 @@ export default function AdminSupportResources() {
                 <li key={idx}>
                   <a
                     href={item.link}
-                    className="text-red-600 text-xs font-medium flex items-center gap-1 hover:underline"
+                    className="text-primary-600 text-xs font-medium flex items-center gap-1 hover:underline"
                   >
                     {item.text}
                     <img src="/svg/red-arrow-right.svg" alt="arrow" className="w-3 h-3" />
@@ -68,7 +68,7 @@ export default function AdminSupportResources() {
                 <li key={idx}>
                   <a
                     href={item.link}
-                    className="text-red-600 text-xs font-medium flex items-center gap-1 hover:underline"
+                    className="text-primary-600 text-xs font-medium flex items-center gap-1 hover:underline"
                   >
                     {item.text}
                     <img src="/svg/red-arrow-right.svg" alt="arrow" className="w-3 h-3" />
@@ -101,7 +101,7 @@ export default function AdminSupportResources() {
                   <p className="text-[11px] text-gray-500 mb-1">Released on {item.date}</p>
                   <a
                     href="#"
-                    className="text-red-600 text-xs font-medium flex items-center gap-1 hover:underline"
+                    className="text-primary-600 text-xs font-medium flex items-center gap-1 hover:underline"
                   >
                     View details
                   </a>
@@ -158,7 +158,7 @@ export default function AdminSupportResources() {
             <select
               value={priority}
               onChange={e => setPriority(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-600"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-600"
             >
               <option>Technical Issue</option>
               <option>Billing Question</option>
@@ -185,7 +185,7 @@ export default function AdminSupportResources() {
               onChange={e => setMessage(e.target.value)}
               rows={4}
               placeholder="Please provide details about your issue..."
-              className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-red-600"
+              className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary-600"
             />
           </div>
 
@@ -193,13 +193,13 @@ export default function AdminSupportResources() {
           <div className="flex items-center gap-4">
             <p className="text-xs font-medium text-gray-600">Priority:</p>
             <label className="text-xs text-gray-700 flex items-center gap-1">
-              <input type="radio" name="priority" className="accent-red-600" /> Low
+              <input type="radio" name="priority" className="accent-primary-600" /> Low
             </label>
             <label className="text-xs text-gray-700 flex items-center gap-1">
-              <input type="radio" name="priority" className="accent-red-600" /> Medium
+              <input type="radio" name="priority" className="accent-primary-600" /> Medium
             </label>
             <label className="text-xs text-gray-700 flex items-center gap-1">
-              <input type="radio" name="priority" className="accent-red-600" /> High
+              <input type="radio" name="priority" className="accent-primary-600" /> High
             </label>
           </div>
 
@@ -214,7 +214,7 @@ export default function AdminSupportResources() {
 
           {/* Submit */}
           <div className="flex justify-end">
-            <Button className="bg-red-600 hover:bg-red-700 text-white text-xsplus px-4 py-2 rounded-lg" label='Submit Ticket' />
+            <Button className="bg-primary-600 hover:bg-red-700 text-white text-xsplus px-4 py-2 rounded-lg" label='Submit Ticket' />
           </div>
         </CardContent>
       </Card>

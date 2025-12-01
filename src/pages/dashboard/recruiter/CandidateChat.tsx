@@ -3,7 +3,7 @@ import { Checkbox } from '@/components/ui/Checkbox'
 import { useNavigate } from 'react-router-dom'
 
 export default function CandidateSummary() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const candidate = {
     name: 'Alex Johnson',
@@ -18,7 +18,7 @@ export default function CandidateSummary() {
     { label: 'Experience', color: 'bg-green-500', percent: '85%' },
     { label: 'Aptitude', color: 'bg-yellow-500', percent: '65%' },
     { label: 'Behavior', color: 'bg-green-500', percent: '80%' },
-    { label: 'Expertise', color: 'bg-red-600', percent: '45%' },
+    { label: 'Expertise', color: 'bg-primary-600', percent: '45%' },
   ]
 
   const takeaways = [
@@ -108,7 +108,7 @@ export default function CandidateSummary() {
           <div className="p-6 space-y-6">
             {/* Candidate Card */}
             {/* <div className="flex flex-col items-center text-center">
-              <div className="w-24 h-24 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center text-white text-4xl font-bold">
+              <div className="w-24 h-24 bg-gradient-to-br from-red-400 to-primary-600 rounded-full flex items-center justify-center text-white text-4xl font-bold">
                 AJ
               </div>
               <h2 className="mt-4 text-xl font-bold text-gray-900">{candidate.name}</h2>
@@ -215,7 +215,7 @@ export default function CandidateSummary() {
 
                 {/* Email Button */}
                 <button className="flex items-center justify-center gap-2 w-full border 
-                    border-red-600 text-red-600 rounded-md py-2.5 font-medium text-sm hover:bg-red-50 
+                    border-primary-600 text-primary-600 rounded-md py-2.5 font-medium text-sm hover:bg-red-50 
                     transition-colors text-xsplus ">
                   <img src="/svg/red-mail.svg" alt="email" className="w-4 h-4" />
                   Send via Email

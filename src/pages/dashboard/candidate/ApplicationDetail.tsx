@@ -123,7 +123,7 @@ export const ApplicationDetail = () => {
             {/* </div> */}
 
             <div className="flex justify-end">
-              <button className="p-4 text-primary-600 hover:text-red-600 font-medium text-xsplus">
+              <button className="p-4 text-primary-600 hover:text-primary-600 font-medium text-xsplus">
                 View all applications
               </button>
             </div>

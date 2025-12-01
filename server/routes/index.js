@@ -10,6 +10,7 @@ import messageRoutes from "./message.routes.js";
 import callTranscriptRoutes from "./callTranscript.routes.js";
 import resumeRoutes from "./resume.routes.js";
 import subscriptionRoutes from "./subscription.routes.js";
+import aiRoutes from "./ai.routes.js";
 
 const router = Router();
 
@@ -24,5 +25,6 @@ router.use("/messages", messageRoutes);
 router.use("/calls", callTranscriptRoutes);
 router.use("/resumes", resumeRoutes);
 router.use("/subscriptions", subscriptionRoutes);
+router.use("/ai", aiRoutes);
 
 export default router;

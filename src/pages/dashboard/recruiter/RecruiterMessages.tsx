@@ -248,7 +248,7 @@ const RecruiterMessages = () => {
                           <div className="flex justify-between w-full gap-x-2">
                             <p className="text-sm text-gray-600 truncate">{message.preview}</p>
                             {!message.isRead && (
-                              <div className="flex items-center justify-center w-[20px] h-[20px] px-1.5 bg-red-600 text-white text-xs font-semibold rounded-full">
+                              <div className="flex items-center justify-center w-[20px] h-[20px] px-1.5 bg-primary-600 text-white text-xs font-semibold rounded-full">
                                 2
                               </div>
                             )}
@@ -304,7 +304,7 @@ const RecruiterMessages = () => {
                         <div
                           className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
                             msg.sender === 'user'
-                              ? 'bg-red-600 text-white rounded-br-none'
+                              ? 'bg-primary-600 text-white rounded-br-none'
                               : 'bg-gray-100 text-gray-900 rounded-bl-none'
                           }`}
                         >
@@ -338,7 +338,7 @@ const RecruiterMessages = () => {
                        <img src={'/svg/emoji.svg'} alt="icon" />
                       <button
                         onClick={handleSendMessage}
-                        className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                        className="p-2 bg-primary-600 text-white rounded-lg hover:bg-red-700"
                       >
                         <img src={'/svg/send.svg'} alt="icon" />
                       </button>

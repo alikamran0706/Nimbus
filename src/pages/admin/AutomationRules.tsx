@@ -62,7 +62,7 @@ export default function AdminAutomationRules() {
                 onClick={() => setSelectedRule(rule.id)}
                 className={`p-3 border-l-2  cursor-pointer transition shadow-sm ${
                   selectedRule === rule.id
-                    ? 'border-primary-600 bg-red-50 text-red-600'
+                    ? 'border-primary-600 bg-red-50 text-primary-600'
                     : 'border-gray-100 hover:bg-gray-50'
                 }`}
               >
@@ -114,7 +114,7 @@ export default function AdminAutomationRules() {
                   <input
                     type="text"
                     placeholder="Auto-tag JavaScript candidates"
-                    className="w-full md:w-[55%] border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-600"
+                    className="w-full md:w-[55%] border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-600"
                   />
                   <div className="flex items-center gap-4">
                     <label className="flex items-center gap-1 text-xs text-gray-700">
@@ -124,7 +124,7 @@ export default function AdminAutomationRules() {
                       />{' '}
                       Rule Active
                     </label>
-                    <button className="text-xs text-red-600 font-medium hover:underline flex items-center gap-2">
+                    <button className="text-xs text-primary-600 font-medium hover:underline flex items-center gap-2">
                       <img src="/svg/admin/red-delete.svg" alt="add" className="w-3 h-3" /> Add
                       Condition
                     </button>
@@ -135,7 +135,7 @@ export default function AdminAutomationRules() {
               {/* Trigger */}
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">Trigger</label>
-                <select className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-600">
+                <select className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-600">
                   <option>New resume uploaded</option>
                   <option>Candidate applied</option>
                   <option>Interview scheduled</option>
@@ -146,7 +146,7 @@ export default function AdminAutomationRules() {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <label className="block text-xs font-medium text-gray-600">Conditions (IF)</label>
-                  <button className="text-xs text-red-600 font-medium hover:underline">
+                  <button className="text-xs text-primary-600 font-medium hover:underline">
                     + Add Condition
                   </button>
                 </div>
@@ -204,7 +204,7 @@ export default function AdminAutomationRules() {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <label className="block text-xs font-medium text-gray-600">Actions (THEN)</label>
-                  <button className="text-xs text-red-600 font-medium hover:underline">
+                  <button className="text-xs text-primary-600 font-medium hover:underline">
                     + Add Action
                   </button>
                 </div>

@@ -3,12 +3,12 @@ import { useAppSelector } from '@hooks/redux'
 import { Helmet } from 'react-helmet'
 
 export const AuthLayout = () => {
-  const { isAuthenticated } = useAppSelector(state => state.auth)
+  const { isAuthenticated, user } = useAppSelector(state => state.auth)
 
   // Redirect to dashboard if already authenticated
-  if (isAuthenticated) {
+  if (isAuthenticated && user?.role !== 'candidate') {
     return <Navigate to="/dashboard" replace />
-  }
+  } else if (user?.role === 'candidate') return <Navigate to="/jobs" replace />
 
   return (
     <>

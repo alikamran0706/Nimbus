@@ -8,20 +8,34 @@ export const getJobs = asyncHandler(async (req, res) => {
 });
 
 export const getJob = asyncHandler(async (req, res) => {
-  const job = await jobService.getJobById(req.params.id);
+  const job = await jobService.getJobById(req.params.id, { 
+    includeApplications: includeApplications === "true" 
+  });
   if (!job) throw new AppError("Job not found", 404);
   res.status(200).json({ status: "success", data: job });
 });
 
 export const createJob = asyncHandler(async (req, res) => {
   req.body['user'] = req.user;
-
-  console.log(req.user,'dddddddddddddddddddddddd')
+  if (req.file) {
+    req.body.media = {
+      url: req.file.path,
+      caption: req.body.caption || "",
+      isPrimary: true
+    };
+  }
   const job = await jobService.createJob(req.body);
   res.status(201).json({ status: "success", data: job });
 });
 
 export const updateJob = asyncHandler(async (req, res) => {
+  if (req.file) {
+    req.body.media = {
+      url: req.file.path,
+      caption: req.body.caption || "",
+      isPrimary: true
+    };
+  }
   const job = await jobService.updateJob(req.params.id, req.body);
   res.status(200).json({ status: "success", data: job });
 });

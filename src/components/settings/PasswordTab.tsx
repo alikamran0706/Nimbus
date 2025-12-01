@@ -62,8 +62,8 @@ const PasswordTab = () => {
                     className="sr-only peer"
                   />
                   <div
-                    className="w-[18px] h-[18px] border-2 border-gray-300 rounded-sm peer-checked:bg-red-600 
-                    peer-checked:border-red-600 flex items-center justify-center peer-focus:ring-2 
+                    className="w-[18px] h-[18px] border-2 border-gray-300 rounded-sm peer-checked:bg-primary-600 
+                    peer-checked:border-primary-600 flex items-center justify-center peer-focus:ring-2 
                     peer-focus:ring-red-300"
                   >
                     <svg

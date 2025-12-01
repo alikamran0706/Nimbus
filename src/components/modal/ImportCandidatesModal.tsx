@@ -43,7 +43,7 @@ export default function ImportCandidatesModal({ isOpen, onClose }: ImportCandida
         {importOptions.map(option => (
           <button
             key={option.id}
-            className={`w-full p-4 rounded-lg border border-gray-200 hover:border-red-600 hover:bg-red-50 transition text-left`}
+            className={`w-full p-4 rounded-lg border border-gray-200 hover:border-primary-600 hover:bg-red-50 transition text-left`}
           >
             <div className="flex items-start gap-3">
               <img src={option.image} alt="icon" />

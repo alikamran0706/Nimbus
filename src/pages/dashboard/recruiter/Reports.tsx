@@ -234,7 +234,7 @@ export default function RecruiterReports() {
                   <td className="px-6 py-4 text-sm text-gray-600">{metric.completed}</td>
                   <td className="px-6 py-4 text-sm text-gray-600">{metric.pending}</td>
                   <td className="px-6 py-4 text-sm text-gray-600">{metric.rejected}</td>
-                  <td className="px-6 py-4 text-sm font-semibold text-red-600">
+                  <td className="px-6 py-4 text-sm font-semibold text-primary-600">
                     {metric.conversion}
                   </td>
                 </tr>

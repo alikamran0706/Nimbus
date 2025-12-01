@@ -14,7 +14,7 @@ export const VerifyEmail = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-  const { isLoading, error, isAuthenticated } = useAppSelector(state => state.auth)
+  const { isLoading, error, isAuthenticated, user } = useAppSelector(state => state.auth)
 
   const email = location.state?.email || 'user@example.com'
 
@@ -29,9 +29,11 @@ export const VerifyEmail = () => {
   }, [timer])
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && user?.role!=='candidate') {
       navigate('/dashboard', { replace: true })
     }
+    else if(user?.role === 'candidate')
+      navigate('/jobs', { replace: true })
   }, [isAuthenticated, navigate])
 
   useEffect(() => {

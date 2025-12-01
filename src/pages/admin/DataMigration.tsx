@@ -116,7 +116,7 @@ export default function AdminDataMigration() {
             onClick={() => setActiveTab(tab.key)}
             className={`px-4 py-2 text-sm font-medium ${
               activeTab === tab.key
-                ? 'text-red-600 border-b-2 border-red-600'
+                ? 'text-primary-600 border-b-2 border-primary-600'
                 : 'text-gray-600 hover:text-gray-800'
             }`}
           >
@@ -345,7 +345,7 @@ export default function AdminDataMigration() {
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="text-xs text-green-600 font-medium">{log.status}</span>
-                      <button className="text-xs text-red-600 font-semibold hover:underline">
+                      <button className="text-xs text-primary-600 font-semibold hover:underline">
                         {log.log}
                       </button>
                     </div>
@@ -425,7 +425,7 @@ export default function AdminDataMigration() {
                   <img src="/svg/red-mail.svg" className="w-5 h-5" />
                   <span className="text-sm text-gray-800">Gmail</span>
                 </div>
-                <button className="text-xs text-red-600 font-medium">Disconnect</button>
+                <button className="text-xs text-primary-600 font-medium">Disconnect</button>
               </div>
 
               <div className="border border-gray-200 rounded-lg p-3 flex items-center justify-between">
@@ -440,7 +440,7 @@ export default function AdminDataMigration() {
                 <button className="text-xs text-green-600 font-medium">Connected</button>
               </div>
 
-              <button className="text-xs text-red-600 font-medium hover:underline">
+              <button className="text-xs text-primary-600 font-medium hover:underline">
                 + Connect New Account
               </button>
 
@@ -454,7 +454,7 @@ export default function AdminDataMigration() {
               </div>
 
               {/* <Button
-                className="bg-red-50 text-red-600 hover:bg-red-100 text-xsplus px-4 py-2 rounded-md w-full mt-2"
+                className="bg-red-50 text-primary-600 hover:bg-red-100 text-xsplus px-4 py-2 rounded-md w-full mt-2"
                 label="Clear All Import History"
               /> */}
                <button className="text-primary-600 border border-primary-600  text-xs font-medium px-3 py-1.5 rounded-lg">

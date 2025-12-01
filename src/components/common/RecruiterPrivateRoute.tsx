@@ -10,8 +10,6 @@ export const RecruiterPrivateRoute = ({ children }: RecruiterPrivateRouteProps) 
   const { isAuthenticated, isLoading, user } = useAppSelector((state) => state.auth)
   const location = useLocation();
 
-  console.log(user,'useruseruser')
-
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">

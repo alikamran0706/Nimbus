@@ -36,7 +36,7 @@ import CandidateChat from './pages/dashboard/recruiter/CandidateChat'
 import CandidateCall from './pages/dashboard/recruiter/CallCandidate'
 import { AdminPrivateRoute } from './components/common/AdminPrivateRoute'
 import AdminDashboard from './pages/admin/Dashboard'
-import {AdminMainLayout} from './components/common/AdminMainLayout'
+import { AdminMainLayout } from './components/common/AdminMainLayout'
 import AdminUsers from './pages/admin/Users'
 import AdminUserManagement from './pages/admin/UserManagement'
 import AdminIntegrations from './pages/admin/Integrations'
@@ -50,6 +50,7 @@ import AdminAutomaticSchedulingPage from './pages/admin/AutomaticSchedulingPage'
 import CandidateProfile from './pages/admin/CandidateProfile'
 import AdminSupportResources from './pages/admin/SupportResources'
 import JobDetail from './pages/dashboard/recruiter/JobDetail'
+import JobsPage from './pages/dashboard/candidate/Jobs'
 
 function App() {
   const dispatch = useAppDispatch()
@@ -103,7 +104,7 @@ function App() {
 
         {/* Protected Routes */}
 
-         <Route
+        <Route
           path="admin"
           element={
             <AdminPrivateRoute>
@@ -124,7 +125,7 @@ function App() {
           <Route path="automate-schedule" element={<AdminAutomaticSchedulingPage />} />
           <Route path="candidate" element={<CandidateProfile />} />
 
-           <Route index element={<AdminDashboard />} />
+          <Route index element={<AdminDashboard />} />
         </Route>
 
         {/* <Route path="recruiter" element={<Dashboard />} /> */}
@@ -142,7 +143,7 @@ function App() {
           <Route path="create-ai-job" element={<AIJobPostingAssistant />} />
           <Route path="create-job" element={<CreateJobPosting />} />
           <Route path="job/:id" element={<JobDetail />} />
-          
+
           <Route path="candidates" element={<RecruiterCandidates />} />
           <Route path="messages" element={<RecruiterMessages />} />
           <Route path="reports" element={<RecruiterReports />} />
@@ -151,7 +152,7 @@ function App() {
           <Route path="candidate" element={<RecruiterCandidateDetail />} />
           <Route path="candidate-chat" element={<CandidateChat />} />
           <Route path="candidate-call" element={<CandidateCall />} />
-          
+
           <Route index element={<RecruiterDashboard />} />
         </Route>
 
@@ -164,8 +165,9 @@ function App() {
               </PrivateRoute>
             }
           >
-            <Route index element={<Navigate to="/applications" replace />} />
+            <Route index element={<Navigate to="/jobs" replace />} />
             <Route path="applications" element={<ApplicationDetail />} />
+            <Route path="jobs" element={<JobsPage />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="profile" element={<Profile />} />
             <Route path="configure-setting" element={<ConfigureSetting />} />
@@ -177,7 +179,7 @@ function App() {
         }
 
         {/* Catch all route */}
-        <Route path="*" element={<Navigate to="/applications" replace />} />
+        <Route path="*" element={<Navigate to="/jobs" replace />} />
       </Routes>
 
       <ToastContainer

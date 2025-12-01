@@ -53,7 +53,7 @@ export const RightSidebar = () => {
               <img src={'/svg/gray-cross.svg'} alt="Icon" />
             </button>
           </div>
-          <button className="flex items-center justify-center gap-2 text-primary-600 hover:text-red-600 font-medium text-xsplus">
+          <button className="flex items-center justify-center gap-2 text-primary-600 hover:text-primary-600 font-medium text-xsplus">
             + Add another role
           </button>
         </div>
@@ -121,7 +121,7 @@ export const RightSidebar = () => {
         </div>
 
         <div className="flex justify-end">
-          <button className="text-primary-600 hover:text-red-600 font-medium text-sm p-4">
+          <button className="text-primary-600 hover:text-primary-600 font-medium text-sm p-4">
             View all communications
           </button>
         </div>

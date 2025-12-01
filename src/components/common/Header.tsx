@@ -13,7 +13,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
             <button
               type="button"
               onClick={onMenuClick}
-              className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-600"
+              className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-600"
               aria-label="Open sidebar"
               aria-controls="mobile-sidebar"
             >
@@ -37,7 +37,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
 
           <div className="flex items-center space-x-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-white font-semibold">
+              <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-semibold">
                 C
               </div>
               <span className="text-gray-700 capitalize">Candidate</span>

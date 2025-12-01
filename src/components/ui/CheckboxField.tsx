@@ -22,6 +22,6 @@ export const CheckboxField = ({ name, label, extraLink }: CheckboxFieldProps & {
       </div>
       {extraLink && <div>{extraLink}</div>}
     </div>
-    <ErrorMessage name={name} component="div" className="text-sm text-red-600 mt-1" />
+    <ErrorMessage name={name} component="div" className="text-sm text-primary-600 mt-1" />
   </>
 )

@@ -7,12 +7,14 @@ class JobService {
     const token = localStorage.getItem('token')
 
     const config: RequestInit = {
+      ...options,
       headers: {
-        'Content-Type': 'application/json',
+        ...(options.body instanceof FormData
+          ? {} // ❗ Do NOT set Content-Type for FormData — browser will set the boundary
+          : { 'Content-Type': 'application/json' }),
         ...(token && { Authorization: `Bearer ${token}` }),
         ...options.headers,
       },
-      ...options,
     }
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, config)
@@ -26,24 +28,49 @@ class JobService {
   }
 
   async post<T = any>(payload: any): Promise<T> {
+    const isFormData = payload instanceof FormData
+
     return this.request<T>('/jobs', {
       method: 'POST',
-      body: JSON.stringify(payload),
+      body: isFormData ? payload : JSON.stringify(payload),
     })
   }
 
-  async get(): Promise<ApiResponse> {
-    return this.request<ApiResponse>('/jobs', {
+  async put<T = any>(payload: any, id: string): Promise<T> {
+    const isFormData = payload instanceof FormData
+
+    return this.request<T>(`/jobs/${id}`, {
+      method: 'PUT',
+      body: isFormData ? payload : JSON.stringify(payload),
+    })
+  }
+
+  // async get(): Promise<ApiResponse> {
+  //   return this.request<ApiResponse>("/jobs", {
+  //     method: "GET",
+  //   });
+  // }
+  // ?includeApplications=true
+  async get(filters: any = {}): Promise<ApiResponse> {
+    const queryString = new URLSearchParams(filters).toString()
+    return this.request<ApiResponse>(`/jobs?${queryString}`, {
       method: 'GET',
     })
   }
 
-  async getById(id: string): Promise<ApiResponse> {
-    return this.request<ApiResponse>(`/jobs/${id}`, {
+  async getById(id: string, includeApplications?: boolean): Promise<ApiResponse> {
+    const queryParams = new URLSearchParams()
+    if (includeApplications) {
+      queryParams.append('includeApplications', 'true')
+    }
+
+    const queryString = queryParams.toString()
+    const url = queryString ? `/jobs/${id}?${queryString}` : `/jobs/${id}`
+
+    return this.request<ApiResponse>(url, {
       method: 'GET',
     })
   }
-  
 }
 
 export const jobService = new JobService()

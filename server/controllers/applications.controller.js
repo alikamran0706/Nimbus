@@ -14,6 +14,7 @@ export const getApplication = asyncHandler(async (req, res) => {
 });
 
 export const createApplication = asyncHandler(async (req, res) => {
+  req.body['user'] = req.user;
   const item = await applicationService.createApplication(req.body);
   res.status(201).json({ status: "success", data: item });
 });

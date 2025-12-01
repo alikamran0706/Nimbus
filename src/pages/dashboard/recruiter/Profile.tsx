@@ -50,7 +50,7 @@ export default function RecruiterProfile() {
         </div>
         <button
           onClick={() => setIsEditing(!isEditing)}
-          className="text-sm px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors flex items-center gap-x-2"
+          className="text-sm px-4 py-2 bg-primary-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors flex items-center gap-x-2"
         >
           {isEditing ? (
             'Cancel'
@@ -75,11 +75,11 @@ export default function RecruiterProfile() {
         <div className="flex flex-col sm:flex-row gap-8 p-8 ">
           {/* Profile Picture */}
           <div className="flex flex-col items-center">
-            <div className="w-32 h-32 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center text-white text-5xl font-bold mb-4">
+            <div className="w-32 h-32 bg-gradient-to-br from-red-400 to-primary-600 rounded-full flex items-center justify-center text-white text-5xl font-bold mb-4">
               {profile.name.charAt(0).toUpperCase()}
             </div>
             {isEditing && (
-              <button className="text-red-600 hover:text-red-700 font-medium text-sm">
+              <button className="text-primary-600 hover:text-red-700 font-medium text-sm">
                 Change Photo
               </button>
             )}
@@ -239,7 +239,7 @@ export default function RecruiterProfile() {
         {isEditing && (
           <button
             onClick={handleSave}
-            className="mx-8 w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors"
+            className="mx-8 w-full px-4 py-2 bg-primary-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors"
           >
             Save Changes
           </button>

@@ -20,15 +20,19 @@ export default class APIFeatures {
     return this;
   }
 
-  search(fields = []) {
+ search(fields = []) {
     if (this.queryString.search && fields.length) {
-      const regex = new RegExp(this.queryString.search, "i");
+      const searchTerm = this.queryString.search;
+      
       this.query = this.query.find({
-        $or: fields.map((field) => ({ [field]: regex })),
+        $or: fields.map((field) => ({ 
+          [field]: { $regex: searchTerm, $options: 'i' } 
+        })),
       });
     }
     return this;
   }
+
 
   sort() {
     if (this.queryString.sort) {
@@ -55,8 +59,13 @@ export default class APIFeatures {
     const limit = parseInt(this.queryString.limit, 10) || defaultLimit;
     const skip = (page - 1) * limit;
 
+    this.pagination = {
+      page,
+      limit,
+      skip
+    };
+
     this.query = this.query.skip(skip).limit(limit);
-    this.pagination = { page, limit };
     return this;
   }
 }

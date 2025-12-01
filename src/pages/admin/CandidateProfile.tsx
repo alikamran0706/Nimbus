@@ -101,7 +101,7 @@ export default function CandidateProfile() {
                   onClick={() => setActiveTab(tab.key)}
                   className={`px-4 py-2 text-sm font-medium ${
                     activeTab === tab.key
-                      ? 'text-red-600 border-b-2 border-red-600'
+                      ? 'text-primary-600 border-b-2 border-primary-600'
                       : 'text-gray-600 hover:text-gray-800'
                   }`}
                 >
@@ -197,7 +197,7 @@ export default function CandidateProfile() {
                   <div className="border border-gray-200 rounded-lg p-4">
                     <div className="flex justify-between items-start">
                       <div className="flex gap-2 items-center">
-                        <div className="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center text-red-600 text-xs font-semibold">
+                        <div className="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center text-primary-600 text-xs font-semibold">
                           <img src="/svg/red-mail.svg" className="w-4 h-4" />
                         </div>
                         <div>

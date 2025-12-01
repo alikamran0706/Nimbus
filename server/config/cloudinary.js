@@ -47,42 +47,32 @@ export const imageStorage = new CloudinaryStorage({
 export const avatarUpload = multer({ storage: imageStorage });
 export const videoUpload = multer({
   storage: videoStorage,
-  limits: { fileSize: 100 * 1024 * 1024 }, // 100MB max
+  limits: { fileSize: 100 * 1024 * 1024 }, 
 });
 
 export default cloudinary;
 
-// ... Upload Posts Data ...
-// export const petMediaStorage = new CloudinaryStorage({
-//   cloudinary,
-//   params: async (req, file) => {
-//     return {
-//       folder: "pet_media",
-//       resource_type: "auto", // dynamically handles image/video
-//       allowed_formats: ["jpg", "jpeg", "png", "webp", "mp4", "mov", "webm", "avi", "mkv"],
-//       public_id: `${Date.now()}-${file.originalname}`, // optional: unique file name
-//     };
-//   },
-// });
-
-export const petMediaStorage = new CloudinaryStorage({
+export const mediaStorage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => {
-    const cleanName = file.originalname
+
+    const ext = file.originalname.split('.').pop(); // png
+    const baseName = file.originalname
+      .replace(/\.[^/.]+$/, "") // remove extension
       .replace(/\s+/g, "_")
-      .replace(/[^\w.-]/g, ""); // remove unsafe characters
+      .replace(/[^\w.-]/g, ""); 
 
     return {
-      folder: `pet_media/${file.fieldname}`, // Optional: organize by field name
+      folder: `media/${file.fieldname}`,
       resource_type: "auto",
       allowed_formats: ["jpg", "jpeg", "png", "webp", "mp4", "mov", "webm", "avi", "mkv"],
-      public_id: `${Date.now()}-${cleanName}`,
+      public_id: `${Date.now()}-${baseName}`, 
     };
   },
 });
 
 export const postMediaUpload = multer({
-  storage: petMediaStorage,
+  storage: mediaStorage,
   limits: {
     fileSize: 100 * 1024 * 1024, // 100MB max
   },

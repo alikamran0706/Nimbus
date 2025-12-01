@@ -300,7 +300,7 @@ export default function AdminJobsManagement() {
           <div className="flex justify-between items-center mb-4 px-4 pt-4">
             <h1 className="text-base font-bold text-gray-900">Available Jobs</h1>
             <Button
-              className="bg-red-600 hover:bg-red-700 text-white flex items-center gap-2 rounded-md text-sm px-3 py-2"
+              className="bg-primary-600 hover:bg-primary-700 text-white flex items-center gap-2 rounded-md text-sm px-3 py-2"
               startIcon={<img src="/svg/white-plus.svg" alt="add" className="w-4 h-4" />}
               label="Add New Job"
             />

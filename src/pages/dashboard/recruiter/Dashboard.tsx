@@ -199,7 +199,7 @@ export default function RecruiterDashboard() {
           </p>
         </div>
         <Link
-          to="/recruiter/create-job" className="flex gap-1 items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition">
+          to="/recruiter/create-job" className="flex gap-1 items-center px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition">
           <img src={'/svg/white-applicants.svg'} alt="icon" className="mr-1" />
           <p>Post new job</p>
         </Link>
@@ -348,7 +348,7 @@ export default function RecruiterDashboard() {
               <div className="border-t border-gray-150 p-4 mt-auto">
                 <button
                   onClick={() => handleQuickAction(action.action)}
-                  className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition"
+                  className="flex-1 px-4 py-2 bg-primary-600 hover:bg-red-700 text-white font-semibold rounded-lg transition"
                 >
                   {action.button}
                 </button>

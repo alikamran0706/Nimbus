@@ -75,7 +75,7 @@ export default function AutomaticSchedulingPage() {
               onClick={() => setActiveTab(tab.toLowerCase().replace(' ', '-'))}
               className={`whitespace-nowrap px-4 py-2 text-sm font-medium transition-colors ${
                 activeTab === tab.toLowerCase().replace(' ', '-')
-                  ? 'text-red-600 border-b-2 border-red-600'
+                  ? 'text-primary-600 border-b-2 border-primary-600'
                   : 'text-gray-600 hover:text-gray-800'
               }`}
             >
@@ -132,7 +132,7 @@ export default function AutomaticSchedulingPage() {
               />
               <Button
                 label="Save Settings"
-                className="text-xsplus px-4 py-2 rounded-md bg-red-600 text-white"
+                className="text-xsplus px-4 py-2 rounded-md bg-primary-600 text-white"
               />
             </div>
           </CardContent>
@@ -166,7 +166,7 @@ export default function AutomaticSchedulingPage() {
                         className="border border-gray-300 rounded-md px-3 py-1.5 text-xs"
                         readOnly
                       />
-                      <button className="text-red-600 text-xs font-medium ml-2 hover:underline">
+                      <button className="text-primary-600 text-xs font-medium ml-2 hover:underline">
                         + Add new slot
                       </button>
                     </>
@@ -192,19 +192,19 @@ export default function AutomaticSchedulingPage() {
                       <p className="text-sm font-medium text-gray-900">{b.date}</p>
                       <p className="text-xs text-gray-600">{b.reason}</p>
                     </div>
-                    <button className="text-xs text-red-600 hover:underline">Remove</button>
+                    <button className="text-xs text-primary-600 hover:underline">Remove</button>
                   </div>
                 ))}
                 <Button
                   label="Add Blockout Date"
                   variant="white"
-                  className="text-xsplus px-4 py-2 border rounded-md text-red-600"
+                  className="text-xsplus px-4 py-2 border rounded-md text-primary-600"
                 />
               </div>
 
               <div className="flex justify-end gap-3 pt-4">
                 <Button label="Cancel" variant="white" className="text-xsplus border" />
-                <Button label="Save Availability" className="text-xsplus bg-red-600 text-white" />
+                <Button label="Save Availability" className="text-xsplus bg-primary-600 text-white" />
               </div>
             </div>
           </CardContent>
@@ -235,7 +235,7 @@ export default function AutomaticSchedulingPage() {
                     Connected
                   </button>
                 ) : (
-                  <button className="text-xs text-red-600 border border-red-200 rounded-md px-3 py-1">
+                  <button className="text-xs text-primary-600 border border-red-200 rounded-md px-3 py-1">
                     Connect
                   </button>
                 )}
@@ -261,7 +261,7 @@ export default function AutomaticSchedulingPage() {
 
               <div className="flex justify-end gap-3 pt-4">
                 <Button label="Cancel" variant="white" className="text-xsplus border" />
-                <Button label="Save Settings" className="text-xsplus bg-red-600 text-white" />
+                <Button label="Save Settings" className="text-xsplus bg-primary-600 text-white" />
               </div>
             </div>
           </CardContent>
@@ -331,7 +331,7 @@ export default function AutomaticSchedulingPage() {
                 </td>
 
                 <td className="px-4 text-right">
-                  <button className="text-xs text-red-600 font-medium hover:underline">
+                  <button className="text-xs text-primary-600 font-medium hover:underline">
                     Edit
                   </button>
                 </td>
@@ -356,7 +356,7 @@ export default function AutomaticSchedulingPage() {
           />
           <Button
             label="Save Settings"
-            className="text-xsplus bg-red-600 text-white w-1/2 sm:w-auto rounded-md"
+            className="text-xsplus bg-primary-600 text-white w-1/2 sm:w-auto rounded-md"
           />
         </div>
       </div>

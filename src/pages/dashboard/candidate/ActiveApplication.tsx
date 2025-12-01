@@ -65,7 +65,7 @@ const ActiveApplication = () => {
             </div>
             <button
               onClick={() => {}}
-              className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 text-sm"
+              className="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-red-700 text-sm"
             >
               Yes, withdraw application
             </button>

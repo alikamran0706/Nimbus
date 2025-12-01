@@ -3,6 +3,7 @@ import { getJobs,createJob,getJob,updateJob,deleteJob,createJobsBulk,updateJobsB
   deleteJobsBulk, } from "../controllers/job.controller.js";
 import { verifyAuth } from "../middleware/auth.js";
 import { allowRoles } from "../middleware/role.js";
+import { postMediaUpload } from "../config/cloudinary.js";
 
 const router = express.Router();
 
@@ -10,13 +11,13 @@ const router = express.Router();
 router
   .route("/")
   .get(verifyAuth, getJobs)
-  .post(verifyAuth, allowRoles("admin", "recruiter"), createJob);
+  .post(verifyAuth, allowRoles("admin", "recruiter"), postMediaUpload.single("media"), createJob);
 
 // GET / UPDATE / DELETE specific job
 router
   .route("/:id")
   .get(verifyAuth, getJob)
-  .put(verifyAuth, allowRoles("admin", "recruiter"), updateJob)
+  .put(verifyAuth, allowRoles("admin", "recruiter"), postMediaUpload.single("media"), updateJob)
   .delete(verifyAuth, allowRoles("admin"), deleteJob);
 
 // BULK operations

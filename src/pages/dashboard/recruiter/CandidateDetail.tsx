@@ -70,7 +70,7 @@ export default function RecruiterCandidateDetail() {
             {/* Left Section — Profile Info */}
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
               {/* Avatar */}
-              <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center text-white text-4xl sm:text-5xl font-bold">
+              <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-red-400 to-primary-600 rounded-full flex items-center justify-center text-white text-4xl sm:text-5xl font-bold">
                 AB
               </div>
 
@@ -92,7 +92,7 @@ export default function RecruiterCandidateDetail() {
             <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 w-full lg:w-auto">
               <Button
                 label="Call with Vapi AI"
-                className="bg-red-600 hover:bg-red-700 gap-2 w-full sm:w-auto justify-center"
+                className="bg-primary-600 hover:bg-red-700 gap-2 w-full sm:w-auto justify-center"
                 startIcon={<img src="/svg/white-phone.svg" alt="icon" className="w-4 h-4" />}
                 onClick={() => navigate("/recruiter/candidate-call")}
               />
@@ -124,7 +124,7 @@ export default function RecruiterCandidateDetail() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`pb-4 px-1 font-medium text-sm transition-colors ${
                   activeTab === tab.id
-                    ? 'text-red-600 border-b-2 border-red-600'
+                    ? 'text-primary-600 border-b-2 border-primary-600'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >

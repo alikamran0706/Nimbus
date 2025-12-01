@@ -59,7 +59,7 @@ export default function InterviewCalendar() {
         <div className="flex items-center justify-center mb-4">
           <button
             onClick={handleMonthClick}
-            className="font-semibold text-gray-900 text-sm hover:text-red-600 transition"
+            className="font-semibold text-gray-900 text-sm hover:text-red-primary transition"
           >
             {monthName}
           </button>
@@ -73,7 +73,7 @@ export default function InterviewCalendar() {
                 onClick={() => handleYearSelect(year)}
                 className={`text-center text-sm py-2 rounded-lg cursor-pointer ${
                   year === currentYear
-                    ? 'bg-red-600 text-white font-semibold'
+                    ? 'bg-primary-600 text-white font-semibold'
                     : 'hover:bg-gray-100 text-gray-700'
                 }`}
               >
@@ -100,7 +100,7 @@ export default function InterviewCalendar() {
                     day === null
                       ? ''
                       : day === selectedDate
-                      ? 'bg-red-600 text-white font-semibold'
+                      ? 'bg-primary-600 text-white font-semibold'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >

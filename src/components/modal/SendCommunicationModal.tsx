@@ -80,7 +80,7 @@ export default function SendCommunicationModal({ isOpen, onClose }: SendCommunic
               onChange={handleNotificationChange}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-red-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-red-300">
+            <div className="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-primary-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-red-300">
               <div className="absolute top-[2px] left-[2px] w-5 h-5 bg-white border-gray-300 border rounded-full transition-all peer-checked:translate-x-5"></div>
             </div>
           </label>

@@ -105,7 +105,7 @@ export default function RecruiterCandidates() {
                 label: 'Import from Gmail',
                 emoji: '📧',
                 bg: 'bg-red-100',
-                text: 'text-red-600',
+                text: 'text-primary-600',
                 image: '/svg/red-mail.svg',
               },
               {
@@ -257,7 +257,7 @@ export default function RecruiterCandidates() {
             )}
           </div>
           <div className="flex justify-end">
-            <button className="sm:w-auto px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition">
+            <button className="sm:w-auto px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition">
               Apply Filters
             </button>
           </div>
@@ -417,7 +417,7 @@ export default function RecruiterCandidates() {
             {selectedCandidates.length} candidates selected
           </span>
           <div className="flex flex-wrap gap-2">
-            <button className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition">
+            <button className="flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition">
               <img src={'/svg/white-tick.svg'} alt="icon" className="mr-1" />
               <p>Shortlist Selected</p>
             </button>

@@ -147,7 +147,7 @@ export function Resume() {
               <div className="flex justify-end pt-4">
                 <button
                   type="submit"
-                  className="text-sm px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 w-full sm:w-auto"
+                  className="text-sm px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-red-700 w-full sm:w-auto"
                 >
                   Save Changes
                 </button>
