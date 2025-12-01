@@ -46,13 +46,13 @@ export default function RecruiterCandidates() {
   const getSourceIcon = (source: string) => {
     switch (source) {
       case 'Website':
-        return '/svg/gray-globe.svg' // Example: blue color for LinkedIn
+        return '/svg/gray-globe.svg' 
       case 'LinkedIn':
-        return '/svg/blue-linkedin.svg' // Example: gray color for GitHub
+        return '/svg/blue-linkedin.svg' 
       case 'Email':
-        return '/svg/red-mail.svg' // Example: blue color for Twitter
+        return '/svg/red-mail.svg' 
       default:
-        return '/svg/gray-globe.svg' // Default color for unknown source
+        return '/svg/gray-globe.svg' 
     }
   }
 

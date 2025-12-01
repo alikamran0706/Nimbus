@@ -9,7 +9,8 @@ export const getJobs = asyncHandler(async (req, res) => {
 
 export const getJob = asyncHandler(async (req, res) => {
   const job = await jobService.getJobById(req.params.id, { 
-    includeApplications: includeApplications === "true" 
+    includeApplications: "true" 
+    // includeApplications: includeApplications === "true" 
   });
   if (!job) throw new AppError("Job not found", 404);
   res.status(200).json({ status: "success", data: job });

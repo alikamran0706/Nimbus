@@ -32,7 +32,7 @@ export const VerifyEmail = () => {
     if (isAuthenticated && user?.role!=='candidate') {
       navigate('/dashboard', { replace: true })
     }
-    else if(user?.role === 'candidate')
+    else if(isAuthenticated && user?.role === 'candidate')
       navigate('/jobs', { replace: true })
   }, [isAuthenticated, navigate])
 

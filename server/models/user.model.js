@@ -14,6 +14,7 @@ const UserSchema = new Schema(
     isVerified: { type: Boolean, default: false },
     verificationCode: { type: String },
     verificationCodeExpires: { type: Date },
+    resume: { type: mongoose.Schema.Types.ObjectId, ref: "Resume" },
   },
   { timestamps: true },
 )

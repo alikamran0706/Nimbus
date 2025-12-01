@@ -2,6 +2,9 @@ import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import multer from "multer";
 import dotenv from "dotenv";
+import fs from 'fs';
+import path from 'path';
+
 dotenv.config();
 
 cloudinary.config({
@@ -10,6 +13,27 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+// Temporary storage for parsing
+export const tempStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = path.join(process.cwd(), 'uploads', 'temp');
+    console.log('Destination directory:', uploadDir);
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+      console.log('Created directory:', uploadDir);
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const safeFileName = file.originalname.replace(/[^\w.-]/g, '_');
+    const finalFileName = `resume-${uniqueSuffix}-${safeFileName}`;
+    console.log('Generated filename:', finalFileName);
+    cb(null, finalFileName);
+  }
+});
+
+// Cloudinary storage for final upload
 export const resumeStorage = new CloudinaryStorage({
   cloudinary,
   params: {
@@ -19,9 +43,42 @@ export const resumeStorage = new CloudinaryStorage({
   },
 });
 
+// Temporary upload for parsing
+export const tempUpload = multer({
+  storage: tempStorage,
+  limits: { fileSize: 20 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    console.log('File filter checking:', file.originalname, file.mimetype);
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'text/plain'
+    ];
+    
+    if (allowedTypes.includes(file.mimetype)) {
+      console.log('File type accepted:', file.mimetype);
+      cb(null, true);
+    } else {
+      console.log('File type rejected:', file.mimetype);
+      cb(new Error('Invalid file type. Only PDF, DOC, DOCX, and TXT files are allowed.'));
+    }
+  }
+});
+
+export const debugFileUpload = (req, res, next) => {
+  console.log('=== File Upload Debug ===');
+  console.log('Request body:', req.body);
+  console.log('Request file:', req.file);
+  console.log('Request files:', req.files);
+  console.log('=== End Debug ===');
+  next();
+};
+
+// Final upload to Cloudinary
 export const resumeUpload = multer({
   storage: resumeStorage,
-  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB max
+  limits: { fileSize: 20 * 1024 * 1024 },
 });
 
 // For videos, create a separate storage config

@@ -3,7 +3,6 @@ import { authRoutes } from "./auth.routes.js";
 
 import companyRoutes from "./company.routes.js";
 import jobRoutes from "./job.routes.js";
-import candidateRoutes from "./candidate.routes.js";
 import applicationRoutes from "./applications.routes.js";
 import interviewRoutes from "./interview.routes.js";
 import messageRoutes from "./message.routes.js";
@@ -18,7 +17,6 @@ router.use("/auth", authRoutes);
 
 router.use("/companies", companyRoutes);
 router.use("/jobs", jobRoutes);
-router.use("/candidates", candidateRoutes);
 router.use("/applications", applicationRoutes);
 router.use("/interviews", interviewRoutes);
 router.use("/messages", messageRoutes);

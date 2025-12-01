@@ -8,7 +8,7 @@ export const AuthLayout = () => {
   // Redirect to dashboard if already authenticated
   if (isAuthenticated && user?.role !== 'candidate') {
     return <Navigate to="/dashboard" replace />
-  } else if (user?.role === 'candidate') return <Navigate to="/jobs" replace />
+  } else if (isAuthenticated && user?.role === 'candidate') return <Navigate to="/jobs" replace />
 
   return (
     <>

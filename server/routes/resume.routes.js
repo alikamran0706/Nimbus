@@ -1,11 +1,29 @@
 import express from "express";
-import {parseResumeFile, parseResumeText} from "../controllers/resume.controller.js";
+import { parseResumeFile,  getResumes, getResume, createResume, updateResume, deleteResume, downloadResume } from "../controllers/resume.controller.js";
+
 import { verifyAuth } from "../middleware/auth.js";
-import { resumeUpload } from "../config/cloudinary.js";
+import { debugFileUpload, tempUpload } from "../config/cloudinary.js";
 
 const router = express.Router();
 
-router.post("/parse", verifyAuth, parseResumeText);
-router.post("/upload-resume", verifyAuth, resumeUpload.single("resume"), parseResumeFile);
+router.use(verifyAuth);
+
+// router.post("/parse", parseResumeText);
+router.post("/upload",  debugFileUpload, tempUpload.single("resume"), parseResumeFile);
+
+router
+    .route("/")
+    .get(getResumes)
+    .post(createResume);
+
+router
+    .route("/:id")
+    .get(getResume)
+    .put(updateResume)
+    .delete(deleteResume);
+
+    // Download resume file
+router.get("/:id/download", downloadResume);
+
 
 export default router;

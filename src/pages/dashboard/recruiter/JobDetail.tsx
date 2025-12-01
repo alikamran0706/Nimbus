@@ -77,7 +77,7 @@ const JobDetail = () => {
             </div>
             <div className="border border-gray-150 bg-gray-40 rounded-lg p-4">
               <h3 className="text-sm font-medium text-gray-600 mb-1">Type</h3>
-              <p className="text-lg font-semibold text-gray-900">{job?.jobType}</p>
+              <p className="text-lg font-semibold text-gray-900 capitalize">{job?.jobType}</p>
             </div>
             <div className="border border-gray-150 bg-gray-40 rounded-lg p-4">
               <h3 className="text-sm font-medium text-gray-600 mb-1">Salary</h3>

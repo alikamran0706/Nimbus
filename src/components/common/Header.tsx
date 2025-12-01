@@ -28,11 +28,11 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
               </svg>
             </button>
 
-            <div className="flex flex-col gap-1 py-2">
+            {/* <div className="flex flex-col gap-1 py-2">
               <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Logo%201-ipIH4sCpFZkBtk5klUe1etfgg1WV6H.png"
                 alt="Nimbus" className="h-auto w-12" /> 
               <span className="text-lg sm:text-xl font-semibold text-gray-900">Nimbus</span>
-            </div>
+            </div> */}
           </div>
 
           <div className="flex items-center space-x-4">
