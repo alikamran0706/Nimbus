@@ -1,8 +1,8 @@
 import mongoose, { Schema } from "mongoose"
 
 const EducationSchema = new Schema({
-  institution: { type: String, required: true },
-  degree: { type: String, required: true },
+  institution: { type: String },
+  degree: { type: String },
   fieldOfStudy: String,
   grade: String,
   startDate: Date,
@@ -127,11 +127,7 @@ const ResumeSchema = new Schema(
     
     // Skills & Competencies
     skills: {
-      technical: [{
-        category: String,
-        skills: [String],
-        yearsOfExperience: Number
-      }],
+      technical: [String],
       soft: [String],
       tools: [String],
       methodologies: [String]
@@ -260,13 +256,27 @@ ResumeSchema.virtual('highestEducation').get(function() {
   return sorted[0];
 });
 
-// Indexes
-ResumeSchema.index({ userId: 1 });
+// REMOVE THE DUPLICATE INDEX - keep only explicit indexes below
+// ResumeSchema.index({ userId: 1 }); // REMOVE THIS LINE as userId already has unique: true
+
+// Indexes - Only define indexes that aren't already defined inline
 ResumeSchema.index({ "metadata.keywords": 1 });
 ResumeSchema.index({ "personalInfo.location": 1 });
 ResumeSchema.index({ "metadata.completenessScore": -1 });
 ResumeSchema.index({ "metadata.totalExperienceYears": -1 });
 ResumeSchema.index({ "metadata.lastUpdated": -1 });
+
+// Compound indexes for better query performance
+ResumeSchema.index({ 
+  "personalInfo.location": 1,
+  "professionalSummary.preferredWorkType": 1,
+  "metadata.totalExperienceYears": -1 
+});
+
+ResumeSchema.index({ 
+  "skills.technical.skills": 1,
+  "professionalSummary.yearsOfExperience": -1 
+});
 
 const Resume = mongoose.model("Resume", ResumeSchema);
 

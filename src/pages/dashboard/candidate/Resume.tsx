@@ -5,6 +5,7 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
 import { resumeService } from '@/services/resumeService';
+import { TagField } from '@/components/ui/TagField';
 
 interface ResumeFormData {
   personalInfo: {
@@ -183,6 +184,59 @@ export default function ResumeForm() {
     }
   }, [id, reset]);
 
+  const transformToFormData = (parsedData: any): ResumeFormData => {
+    return {
+      personalInfo: {
+        firstName: parsedData.personalInfo?.firstName || '',
+        lastName: parsedData.personalInfo?.lastName || '',
+        email: parsedData.personalInfo?.email || '',
+        phone: parsedData.personalInfo?.phone || '',
+        dateOfBirth: parsedData.personalInfo?.dateOfBirth ?
+          new Date(parsedData.personalInfo.dateOfBirth) : null,
+        nationality: parsedData.personalInfo?.nationality || '',
+        linkedinUrl: parsedData.personalInfo?.linkedinUrl || '',
+      },
+      professionalSummary: {
+        title: parsedData.professionalSummary?.title || '',
+        summary: parsedData.professionalSummary?.summary || '',
+        yearsOfExperience: parsedData.professionalSummary?.yearsOfExperience || 0,
+        careerLevel: parsedData.professionalSummary?.careerLevel || 'mid',
+        desiredJobTitle: parsedData.professionalSummary?.desiredJobTitle || '',
+        preferredWorkType: parsedData.professionalSummary?.preferredWorkType || 'hybrid',
+        immediateAvailability: parsedData.professionalSummary?.immediateAvailability || false,
+      },
+      workExperience: (parsedData.workExperience || []).map((exp: any) => ({
+        company: exp.company || '',
+        position: exp.position || '',
+        startDate: exp.startDate ? new Date(exp.startDate) : null,
+        endDate: exp.endDate ? new Date(exp.endDate) : null,
+        isCurrent: exp.isCurrent || false,
+        description: exp.description || '',
+      })),
+      education: (parsedData.education || []).map((edu: any) => ({
+        institution: edu.institution || '',
+        degree: edu.degree || '',
+        fieldOfStudy: edu.fieldOfStudy || '',
+        startDate: edu.startDate ? new Date(edu.startDate) : null,
+        endDate: edu.endDate ? new Date(edu.endDate) : null,
+        isCurrent: edu.isCurrent || false,
+      })),
+      skills: {
+        technical: parsedData.skills?.technical || [],
+        soft: parsedData.skills?.soft || [],
+      },
+      certifications: (parsedData.certifications || []).map((cert: any) => ({
+        name: cert.name || '',
+        issuer: cert.issuer || '',
+        issueDate: cert.issueDate ? new Date(cert.issueDate) : null,
+      })),
+      languages: (parsedData.languages || []).map((lang: any) => ({
+        language: typeof lang === 'string' ? lang : lang.language || '',
+        proficiency: typeof lang === 'string' ? 'professional' : lang.proficiency || 'professional',
+      }))
+    };
+  };
+
   const handleFileUpload = async (event: any) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -214,6 +268,21 @@ export default function ResumeForm() {
 
       if (response.success) {
         console.log('Parsed data:', response.data);
+        const { parsedData, resume }: any = response.data;
+
+        const dataToUse = parsedData || resume?.parsedData?.structuredData;
+
+        if (dataToUse) {
+          // Transform and populate the form
+          const formData = transformToFormData(dataToUse);
+          reset(formData);
+
+          // Show success message
+          setError(''); // Clear any previous errors
+          alert('Resume parsed successfully! Form fields have been auto-filled.');
+        } else {
+          setError('Could not extract structured data from resume.');
+        }
         // Use the parsed data to populate your form
         // response.data contains the parsed resume information
       }
@@ -711,22 +780,65 @@ export default function ResumeForm() {
                 <div className="space-y-4 sm:space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Technical Skills</label>
-                    <textarea
+                    <Controller
+                      name="skills.technical"
+                      control={control}
+                      render={({ field }) => (
+                        <TagField
+                          tags={field.value || []}
+                          addTag={(tag) => {
+                            const currentTags = field.value || [];
+                            if (!currentTags.includes(tag) && currentTags.length < 15) {
+                              field.onChange([...currentTags, tag]);
+                            }
+                          }}
+                          removeTag={(tagToRemove) => {
+                            const currentTags = field.value || [];
+                            field.onChange(currentTags.filter(tag => tag !== tagToRemove));
+                          }}
+                          maxTags={15}
+                          className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none"
+                        />
+                      )}
+                    />
+                    {/* <textarea
                       {...register("skills.technical")}
                       rows={2}
                       className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                       placeholder="JavaScript, React, Node.js, Python, AWS..."
-                    />
+                    /> */}
                     <p className="mt-1 text-xs sm:text-sm text-gray-500">Separate skills with commas</p>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Soft Skills</label>
-                    <textarea
+                    {/* <textarea
                       {...register("skills.soft")}
                       rows={2}
                       className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                       placeholder="Communication, Leadership, Problem-solving, Teamwork..."
+                    /> */}
+
+                    <Controller
+                      name="skills.soft"
+                      control={control}
+                      render={({ field }) => (
+                        <TagField
+                          tags={field.value || []}
+                          addTag={(tag) => {
+                            const currentTags = field.value || [];
+                            if (!currentTags.includes(tag) && currentTags.length < 10) {
+                              field.onChange([...currentTags, tag]);
+                            }
+                          }}
+                          removeTag={(tagToRemove) => {
+                            const currentTags = field.value || [];
+                            field.onChange(currentTags.filter(tag => tag !== tagToRemove));
+                          }}
+                          maxTags={10}
+                          className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none"
+                        />
+                      )}
                     />
                   </div>
                 </div>
@@ -797,7 +909,24 @@ export default function ResumeForm() {
               </div>
 
               {/* Submit Section */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+
+               <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 justify-end">
+                    <button
+                      type="button"
+                      onClick={() => navigate('/dashboard')}
+                      className="px-4 sm:px-6 py-2 sm:py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="px-4 sm:px-6 py-2 sm:py-3 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {loading ? 'Saving...' : id ? 'Update Resume' : 'Save Resume'}
+                    </button>
+                  </div>
+              {/* <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-0">
                   <div className="text-center sm:text-left">
                     <h3 className="text-base sm:text-lg font-medium text-gray-900">Save Your Resume</h3>
@@ -820,7 +949,7 @@ export default function ResumeForm() {
                     </button>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </form>
           </div>
 

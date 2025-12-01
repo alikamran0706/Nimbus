@@ -164,9 +164,9 @@ class ResumeParserService {
   }
 
   // ---------------- AI Job Post ----------------
-async generateJobPost(message, formData = {}) {
-  try {
-    const prompt = `
+  async generateJobPost(message, formData = {}) {
+    try {
+      const prompt = `
       You are an AI Job Posting Assistant that creates comprehensive job postings.
 
       CRITICAL INSTRUCTIONS:
@@ -233,28 +233,128 @@ async generateJobPost(message, formData = {}) {
       Return ONLY the JSON object, no additional text.
       `;
 
-    const response = await openAIClient.chat.completions.create({
+      const response = await openAIClient.chat.completions.create({
+        model: "meta-llama/Meta-Llama-3-8B-Instruct:novita",
+        messages: [{ role: "user", content: prompt }],
+      });
+
+      const raw = response.choices[0]?.message?.content?.trim();
+
+      let json;
+      try {
+        json = JSON.parse(raw);
+      } catch (err) {
+        json = { success: false, message: raw, update: {}, summary: "" };
+      }
+
+      return json;
+
+    } catch (err) {
+      console.log("AI ERROR:", err);
+      throw new Error("AI Processing Failed");
+    }
+  }
+
+  // ---------------- AI Resume Create ----------------
+  async generateResume(extractedText) {
+    const prompt = `
+      You are an AI Resume Parser. Your job is to convert resume text into structured JSON following the schema below.
+
+      Extract information from this resume text.
+      
+      IMPORTANT: The text may have some minor OCR errors. Use context to correct them:
+      - "javajcript" → "javascript"
+      - "reactc reduxc" → "react, redux"
+      - "mt" → "HTML" (context: if in skills section)
+      - Fix broken words using common resume terminology
+      - Common errors: 'S' → 'C', 'M' → 'H', 'j' → 'a', extra/missing characters
+      - Use contextual understanding to auto-correct obvious errors
+      - Example corrections: "Slear communication" → "Clear communication", "Mighly organized" → "Highly organized"
+
+      RESUME PARSING INSTRUCTIONS:
+      1. FIRST, mentally reconstruct the text by fixing obvious OCR errors
+      2. THEN, extract the structured information
+      3. If something seems like a typo but makes sense in context (e.g., "javascript"), correct it
+      4. If something is completely garbled (e.g., "LC SjjC Aavajcript"), use context to infer what it should be
+      
+      Extract ALL information accurately. If something is unclear, make your best guess based on context.
+
+      Fix grammar mistakes, correct broken words automatically, and infer missing values where possible.
+      Extract name, contact details, summary, experience, education, skills, certifications, languages.
+
+      Return ONLY valid JSON. No explanation or formatting outside JSON.
+
+      The text is garbled but you need to reconstruct it intelligently.
+
+      Resume Text Resolve errors and broken words of following text:
+      ${extractedText}
+
+      Required JSON Response Format:
+      {
+        "personalInfo": {
+          "firstName": "",
+          "lastName": "",
+          "email": "",
+          "phone": "",
+          "linkedinUrl": "",
+          "nationality": "",
+          "address": {
+            "city": "",
+            "country": ""
+          }
+        },
+        "professionalSummary": {
+          "title": "",
+          "summary": "",
+          "yearsOfExperience": 0
+        },
+        "skills": {
+          "technical": [],
+          "soft": []
+        },
+        "workExperience": [
+          {
+            "company": "",
+            "position": "",
+            "startDate": "",
+            "endDate": "",
+            "isCurrent": false,
+            "location": "",
+            "description": "",
+            "achievements": []
+          }
+        ],
+        "education": [
+          {
+            "institution": "",
+            "degree": "",
+            "fieldOfStudy": "",
+            "startDate": "",
+            "endDate": ""
+          }
+        ],
+        "certifications": [],
+        "languages": []
+      }
+      END JSON ONLY
+    `;
+
+     const aiResponse = await openAIClient.chat.completions.create({
       model: "meta-llama/Meta-Llama-3-8B-Instruct:novita",
       messages: [{ role: "user", content: prompt }],
+      temperature: 0.3
     });
 
-    const raw = response.choices[0]?.message?.content?.trim();
-
-    let json;
+    let parsed;
     try {
-      json = JSON.parse(raw);
+      parsed = JSON.parse(aiResponse.choices[0]?.message?.content.trim());
+      // console.log('ai',parsed,'sdsdsd')
+      return parsed;
     } catch (err) {
-      json = { success: false, message: raw, update: {}, summary: "" };
+      console.log("JSON Parsing Error:", aiResponse.choices[0]?.message?.content);
+      throw new Error("AI returned invalid JSON");
     }
-
-    return json;
-
-  } catch (err) {
-    console.log("AI ERROR:", err);
-    throw new Error("AI Processing Failed");
   }
-}
-
 
 }
 

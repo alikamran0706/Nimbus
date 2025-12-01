@@ -21,19 +21,33 @@ const unlinkAsync = promisify(fs.unlink);
 
 // Parse uploaded resume file (using temp storage)
 export const parseResumeFile = async (req, res) => {
+  console.log('=== parseResumeFile called ===');
+  console.log('Request file:', req.file);
+  console.log('Request user:', req.user);
+  console.log('User ID:', req.user);
 
-  console.log(req.file,'dddd')
   try {
     if (!req.file) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'No file uploaded' 
+      return res.status(400).json({
+        success: false,
+        message: 'No file uploaded'
+      });
+    }
+
+    if (!req.user) {
+      // Clean up temp file if user is not authenticated
+      if (req.file.path && fs.existsSync(req.file.path)) {
+        await unlinkAsync(req.file.path);
+      }
+      return res.status(401).json({
+        success: false,
+        message: 'User authentication required'
       });
     }
 
     const tempFilePath = req.file.path;
     const fileType = req.file.mimetype;
-    
+
     console.log('Processing file:', {
       originalname: req.file.originalname,
       path: tempFilePath,
@@ -43,7 +57,7 @@ export const parseResumeFile = async (req, res) => {
 
     try {
       let extractedText = '';
-      
+
       // Extract text from local file
       if (fileType === 'application/pdf') {
         extractedText = await extractTextFromPDF(tempFilePath);
@@ -54,37 +68,61 @@ export const parseResumeFile = async (req, res) => {
       } else {
         // Clean up temp file
         await unlinkAsync(tempFilePath);
-        return res.status(400).json({ 
-          success: false, 
-          message: 'Unsupported file format' 
+        return res.status(400).json({
+          success: false,
+          message: 'Unsupported file format'
         });
       }
 
       console.log('Text extracted, length:', extractedText.length);
-      
+
       // Parse the extracted text
-      const parsedData = await parseResumeText(extractedText);
+      // const parsedData = await parseResumeText(extractedText);
+      const parsedData = await resumeParserService.generateResume(extractedText);
       console.log('Parsed data:', parsedData);
 
-      // Upload file to Cloudinary
+      // Upload file to Cloudinary with proper user ID
       let cloudinaryResult;
       try {
+        // Get user ID - check if req.user is a string or object
+        let userId;
+        if (typeof req.user === 'string') {
+          userId = req.user;
+        } else if (req.user && typeof req.user === 'object') {
+          // Try common ID fields
+          userId = req.user.id || req.user._id || req.user.userId || 'unknown';
+        } else {
+          userId = 'unknown';
+        }
+
+        console.log('Using userId:', userId);
+
+        const publicId = `resume_${Date.now()}_${userId}`;
+        console.log('Uploading to Cloudinary with public_id:', publicId);
+
+        // UPLOAD AS AUTO OR IMAGE RESOURCE TYPE, NOT RAW
         cloudinaryResult = await cloudinary.uploader.upload(tempFilePath, {
           folder: 'candidate_resumes',
-          resource_type: 'raw',
-          public_id: `resume_${Date.now()}_${req.user.id}`,
+          resource_type: 'raw', // MUST be 'raw' for PDF
+          public_id: publicId,
+          overwrite: true,
+          type: 'upload',
+           pages: true,
+          // Explicitly tell Cloudinary it's a PDF
+          format: 'pdf',
         });
+
         console.log('Uploaded to Cloudinary:', cloudinaryResult.secure_url);
+        console.log('Cloudinary resource type:', cloudinaryResult.resource_type);
       } catch (uploadError) {
         console.error('Cloudinary upload error:', uploadError);
-        // Continue without cloudinary URL if upload fails
       }
 
       // Check if resume already exists for this user
-      let resume = await Resume.findOne({ userId: req.user.id });
+      let resume = await Resume.findOne({ userId: req.user });
 
       const resumeData = {
-        userId: req.user.id,
+        userId: req.user,
         personalInfo: {
           firstName: parsedData.firstName || req.user.firstName || '',
           lastName: parsedData.lastName || req.user.lastName || '',
@@ -147,14 +185,17 @@ export const parseResumeFile = async (req, res) => {
           { $set: resumeData },
           { new: true, runValidators: true }
         );
+        console.log('Updated existing resume');
       } else {
         // Create new resume
         resume = await Resume.create(resumeData);
-        
+        console.log('Created new resume:', resume._id);
+
         // Update user reference
-        await User.findByIdAndUpdate(req.user.id, { 
-          $set: { resume: resume._id } 
+        await User.findByIdAndUpdate(req.user.id, {
+          $set: { resume: resume._id }
         });
+        console.log('Updated user resume reference');
       }
 
       // Clean up temp file
@@ -167,7 +208,7 @@ export const parseResumeFile = async (req, res) => {
 
       res.json({
         success: true,
-        message: 'Resume parsed successfully',
+        message: 'Resume parsed and uploaded successfully',
         data: {
           resume: resume,
           parsedData: parsedData,
@@ -175,14 +216,15 @@ export const parseResumeFile = async (req, res) => {
             name: req.file.originalname,
             size: req.file.size,
             type: fileType,
-            uploadedAt: new Date()
+            uploadedAt: new Date(),
+            cloudinaryUrl: cloudinaryResult?.secure_url || null
           }
         }
       });
 
     } catch (parseError) {
       console.error('Parsing error:', parseError);
-      
+
       // Clean up temp file on error
       if (tempFilePath && fs.existsSync(tempFilePath)) {
         try {
@@ -191,7 +233,7 @@ export const parseResumeFile = async (req, res) => {
           console.error('Error cleaning up temp file:', cleanupError);
         }
       }
-      
+
       res.status(500).json({
         success: false,
         message: 'Failed to parse resume file',
@@ -201,10 +243,99 @@ export const parseResumeFile = async (req, res) => {
 
   } catch (error) {
     console.error('Controller error:', error);
-    res.status(500).json({ 
-      success: false, 
+    res.status(500).json({
+      success: false,
       message: 'Server error during resume processing',
-      error: error.message 
+      error: error.message
+    });
+  }
+};
+
+export const uploadResumeToCloudinary = async (req, res) => {
+  try {
+    console.log('=== uploadResumeToCloudinary called ===');
+    console.log('Request file:', req.file);
+    console.log('Request user:', req.user);
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: 'No file uploaded'
+      });
+    }
+
+    if (!req.user || !req.user) {
+      return res.status(401).json({
+        success: false,
+        message: 'User authentication required'
+      });
+    }
+
+    // Get Cloudinary URL from multer-storage-cloudinary
+    const cloudinaryUrl = req.file.path;
+    console.log('Cloudinary URL:', cloudinaryUrl);
+
+    // Create or update resume record with just the file info
+    let resume = await Resume.findOne({ userId: req.user });
+
+    const resumeData = {
+      userId: req.user,
+      documents: {
+        resumeFile: {
+          url: cloudinaryUrl,
+          fileName: req.file.originalname,
+          fileType: req.file.mimetype,
+          fileSize: req.file.size,
+          uploadedAt: new Date(),
+          isActive: true,
+          cloudinaryPublicId: req.file.filename // Cloudinary stores filename as public_id
+        }
+      },
+      metadata: {
+        lastUpdated: new Date(),
+        version: resume ? resume.metadata?.version + 1 : 1,
+        completenessScore: 0,
+        aiOptimized: false,
+        privacyLevel: 'private'
+      }
+    };
+
+    if (resume) {
+      resume = await Resume.findByIdAndUpdate(
+        resume._id,
+        { $set: resumeData },
+        { new: true, runValidators: true }
+      );
+    } else {
+      resume = await Resume.create(resumeData);
+
+      // Update user reference
+      await User.findByIdAndUpdate(req.user.id, {
+        $set: { resume: resume._id }
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Resume uploaded successfully to Cloudinary',
+      data: {
+        resume: resume,
+        fileInfo: {
+          name: req.file.originalname,
+          size: req.file.size,
+          type: req.file.mimetype,
+          uploadedAt: new Date(),
+          cloudinaryUrl: cloudinaryUrl
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Cloudinary upload error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to upload resume',
+      error: error.message
     });
   }
 };
@@ -293,7 +424,7 @@ export const getResume = asyncHandler(async (req, res) => {
 export const createResume = async (req, res) => {
   try {
     const resumeData = {
-      userId: req.user.id,
+      userId: req.user,
       ...req.body,
       metadata: {
         lastUpdated: new Date(),
@@ -307,8 +438,8 @@ export const createResume = async (req, res) => {
     const resume = await Resume.create(resumeData);
 
     // Update user reference
-    await User.findByIdAndUpdate(req.user.id, { 
-      $set: { resume: resume._id } 
+    await User.findByIdAndUpdate(req.user.id, {
+      $set: { resume: resume._id }
     });
 
     res.status(201).json({
@@ -319,10 +450,10 @@ export const createResume = async (req, res) => {
 
   } catch (error) {
     console.error('Create resume error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Failed to create resume', 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create resume',
+      error: error.message
     });
   }
 };
@@ -335,9 +466,9 @@ export const updateResume = async (req, res) => {
     });
 
     if (!resume) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Resume not found' 
+      return res.status(404).json({
+        success: false,
+        message: 'Resume not found'
       });
     }
 
@@ -362,10 +493,10 @@ export const updateResume = async (req, res) => {
 
   } catch (error) {
     console.error('Update resume error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Failed to update resume', 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update resume',
+      error: error.message
     });
   }
 };
@@ -379,9 +510,9 @@ export const deleteResume = async (req, res) => {
     });
 
     if (!resume) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Resume not found' 
+      return res.status(404).json({
+        success: false,
+        message: 'Resume not found'
       });
     }
 
@@ -399,8 +530,8 @@ export const deleteResume = async (req, res) => {
     await Resume.findByIdAndDelete(req.params.id);
 
     // Remove resume reference from user
-    await User.findByIdAndUpdate(req.user.id, { 
-      $unset: { resume: "" } 
+    await User.findByIdAndUpdate(req.user.id, {
+      $unset: { resume: "" }
     });
 
     res.json({
@@ -410,10 +541,10 @@ export const deleteResume = async (req, res) => {
 
   } catch (error) {
     console.error('Delete resume error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Failed to delete resume', 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete resume',
+      error: error.message
     });
   }
 };
@@ -427,9 +558,9 @@ export const downloadResume = async (req, res) => {
     });
 
     if (!resume || !resume.documents?.resumeFile?.url) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Resume file not found' 
+      return res.status(404).json({
+        success: false,
+        message: 'Resume file not found'
       });
     }
 
@@ -438,10 +569,10 @@ export const downloadResume = async (req, res) => {
 
   } catch (error) {
     console.error('Download resume error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Failed to download resume', 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      message: 'Failed to download resume',
+      error: error.message
     });
   }
 };
@@ -496,7 +627,7 @@ const extractKeywords = (text) => {
     .replace(/[^\w\s]/g, ' ')
     .split(/\s+/)
     .filter(word => word.length > 3 && !commonWords.has(word));
-  
+
   // Get unique keywords (limit to 20)
   return [...new Set(words)].slice(0, 20);
 };
